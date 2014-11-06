@@ -168,7 +168,7 @@
 						-Dfile=aspectj-maven-plugin-1.7-SNAPSHOT.jar -->
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>aspectj-maven-plugin</artifactId>
-					<version>1.7-SNAPSHOT</version>
+					<version>1.7</version>
 					<dependencies>
 						<dependency>
 							<groupId>org.aspectj</groupId>
