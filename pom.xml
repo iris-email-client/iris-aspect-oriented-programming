@@ -14,7 +14,7 @@
 		<compiler.version>1.7</compiler.version>
 		<iris.encoding>UTF-8</iris.encoding>
 		<project.build.sourceEncoding>${iris.encoding}</project.build.sourceEncoding>
-		<aspectj.version>1.8.0</aspectj.version> <!-- 1.7.2.RELEASE -->
+		<aspectj.version>1.8.3</aspectj.version> <!-- 1.7.2.RELEASE -->
 	</properties>
 	<issueManagement>
 		<system></system>
