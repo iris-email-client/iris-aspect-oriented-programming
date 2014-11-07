@@ -18,9 +18,9 @@ public class CoreLoggingAspect {
 	
 	@Before("execution(public * br.unb.cic.iris..*(..))")
 	public void logBefore(JoinPoint joinPoint) {
-		System.out.println("CoreLoggingAspect: logBefore() is running!");
-		System.out.println("CoreLoggingAspect : " + joinPoint.getSignature().getName());
-		System.out.println("******\n");
+//		System.out.println("CoreLoggingAspect: logBefore() is running!");
+//		System.out.println("CoreLoggingAspect : " + joinPoint.getSignature().getName());
+//		System.out.println("******\n");
 	}
 	
 }

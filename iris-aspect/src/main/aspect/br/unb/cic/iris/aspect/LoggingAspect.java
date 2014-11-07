@@ -9,9 +9,9 @@ public class LoggingAspect {
 	
 	@After("execution(public * br.unb.cic.iris..*(..))")
 	public void logAfter(JoinPoint joinPoint) {
-		System.out.println("CoreLoggingAspect: logAfter() is running!");
-		System.out.println("CoreLoggingAspect : " + joinPoint.getSignature().getName());
-		System.out.println("******\n");
+//		System.out.println("CoreLoggingAspect: logAfter() is running!");
+//		System.out.println("CoreLoggingAspect : " + joinPoint.getSignature().getName());
+//		System.out.println("******\n");
 	}
 	
 }
