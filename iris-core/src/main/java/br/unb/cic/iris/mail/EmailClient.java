@@ -33,21 +33,14 @@ public class EmailClient implements IEmailClient {
 
 	@Override
 	public void send(EmailMessage email) throws EmailException {
-		System.out.println("send message: " + email);
-			
-		email.setTo(findAddress(email.getTo()));
+		//email.setTo(findAddress(email.getTo()));
 		//email.setCc(findAddress(email.getCc()));
 		//email.setBcc(findAddress(email.getBcc()));
 		
 		sender.send(email);
 	}
 
-	private String findAddress(String email) throws EmailException {
-		if(email != null && !EmailValidator.validate(email)){
-			return AddressBookDAO.instance().find(email).getAddress();
-		}
-		return email;
-	}
+	
 
 	@Override
 	public List<IrisFolder> listFolders() throws EmailException {
