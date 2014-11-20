@@ -26,6 +26,7 @@ public class TestLucene {
 
 	static EmailMessage msg1, msg2;
 
+	
 	static {
 		msg1 = new EmailMessage();
 		msg1.setFrom("alexandrelucchesi@gmail.com");
@@ -62,7 +63,7 @@ public class TestLucene {
 			IndexManager.setIndex(indexDir); // Set index directory.
 		}
 
-		EmailDAO emailDAO = new EmailDAO();
+		EmailDAO emailDAO = EmailDAO.instance();
 
 		emailDAO.saveMessage(msg1);
 		emailDAO.saveMessage(msg2);
@@ -78,7 +79,7 @@ public class TestLucene {
 	private static void search(String indexDir) throws DBException, IOException {
 		IndexManager.setIndex(indexDir); // Set index directory.
 
-		EmailDAO emailDAO = new EmailDAO();
+		EmailDAO emailDAO = EmailDAO.instance();
 
 		Date lastDate = emailDAO.lastMessageReceived();
 		System.out.println(lastDate);

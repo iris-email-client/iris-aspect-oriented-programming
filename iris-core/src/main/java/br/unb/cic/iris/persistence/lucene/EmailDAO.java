@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.lucene.document.DateTools;
 import org.apache.lucene.document.Document;
@@ -27,10 +28,19 @@ import br.unb.cic.iris.core.exception.DBException;
 import br.unb.cic.iris.core.model.EmailMessage;
 import br.unb.cic.iris.persistence.IEmailDAO;
 
-public class EmailDAO implements IEmailDAO {
+public class EmailDAO extends LuceneDoc<EmailMessage> implements IEmailDAO {
 	
-	//private static SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
+	private static EmailDAO instance;
+	
+	private EmailDAO() { } 
+	
+	public static EmailDAO instance() {
+		if(instance == null) {
+			instance = new EmailDAO();
+		}
+		return instance;
+	}
+	
 	@Override
 	public void saveMessage(EmailMessage message) throws DBException {
 		try {
@@ -38,7 +48,7 @@ public class EmailDAO implements IEmailDAO {
 			writer.addDocument(toLuceneDoc(message));
 			writer.commit();
 		} catch (IOException e) {
-			throw new DBException("An error occurred while saving e-mail message.", e);
+			throw new DBException("An error occured while saving e-mail message.", e);
 		}
 	}
 
@@ -67,8 +77,10 @@ public class EmailDAO implements IEmailDAO {
 		return date;
 	}
 	
-	private Document toLuceneDoc(EmailMessage m) {
+	@Override
+	protected Document toLuceneDoc(EmailMessage m) {
 		List<Field> fields = new ArrayList<Field>();
+		fields.add(new StringField("uuid", UUID.randomUUID().toString(), Store.YES));
 		fields.add(new StringField("type", "email", Store.NO));
 		fields.add(new StringField("from", m.getFrom(), Store.YES));
 		fields.add(new StringField("to", m.getTo(), Store.YES));
@@ -85,6 +97,12 @@ public class EmailDAO implements IEmailDAO {
 			doc.add(f);
 		
 		return doc;
+	}
+
+	@Override
+	protected EmailMessage fromLuceneDoc(Document doc) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
