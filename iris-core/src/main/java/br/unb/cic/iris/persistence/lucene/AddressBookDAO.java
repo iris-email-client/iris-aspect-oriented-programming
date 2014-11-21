@@ -52,8 +52,8 @@ public class AddressBookDAO extends LuceneDoc<AddressBookEntry> implements
 				
 				// Checks whether an address book entry with the given 'id' exists in the index.
 				BooleanQuery q = new BooleanQuery();
-				q.add(new BooleanClause(idQuery, Occur.MUST));
 				q.add(new BooleanClause(typeQuery, Occur.MUST));
+				q.add(new BooleanClause(idQuery, Occur.MUST));
 
 				IndexSearcher searcher = IndexManager.getSearcher();
 				TopDocs docs = searcher.search(q, 1);				
@@ -142,7 +142,7 @@ public class AddressBookDAO extends LuceneDoc<AddressBookEntry> implements
 	@Override
 	public Document toLuceneDoc(AddressBookEntry m) {
 		List<Field> fields = new ArrayList<Field>();
-		fields.add(new StringField("type", "addressBook", Store.NO));
+		fields.add(new StringField("type", "addressBook", Store.YES));
 		fields.add(new LongField("id", m.getId().longValue(), Store.YES));
 		fields.add(new StringField("nick", m.getNick(), Store.YES));
 		fields.add(new StringField("address", m.getAddress(), Store.YES));

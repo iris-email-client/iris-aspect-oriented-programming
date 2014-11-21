@@ -81,7 +81,7 @@ public class EmailDAO extends LuceneDoc<EmailMessage> implements IEmailDAO {
 	protected Document toLuceneDoc(EmailMessage m) {
 		List<Field> fields = new ArrayList<Field>();
 		fields.add(new StringField("uuid", UUID.randomUUID().toString(), Store.YES));
-		fields.add(new StringField("type", "email", Store.NO));
+		fields.add(new StringField("type", "email", Store.YES));
 		fields.add(new StringField("from", m.getFrom(), Store.YES));
 		fields.add(new StringField("to", m.getTo(), Store.YES));
 		fields.add(new StringField("cc", m.getCc(), Store.YES));
@@ -101,8 +101,23 @@ public class EmailDAO extends LuceneDoc<EmailMessage> implements IEmailDAO {
 
 	@Override
 	protected EmailMessage fromLuceneDoc(Document doc) {
-		// TODO Auto-generated method stub
-		return null;
+		EmailMessage email = new EmailMessage();
+		email.setFrom(doc.getField("from").stringValue());
+		email.setTo(doc.getField("to").stringValue());
+		email.setCc(doc.getField("cc").stringValue());
+		email.setBcc(doc.getField("bcc").stringValue());
+		email.setSubject(doc.getField("subject").stringValue());
+		email.setMessage(doc.getField("message").stringValue());
+		try {
+			email.setDate(DateTools.stringToDate(doc.getField("date").stringValue()));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//email.setFolder(doc.getField("folderId").stringValue());
+		email.setFolder(null);
+		
+		return email;
 	}
 
 }

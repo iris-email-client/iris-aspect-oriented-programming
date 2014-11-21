@@ -11,7 +11,7 @@ public abstract class TestLucene {
 	
 	// When set to 'true', creates the index in the filesystem in the path specified by 'DEFAULT_IDX_DIR'.
 	// When 'false', creates the index in RAM.
-	protected static final boolean FS_IDX = false;
+	protected static boolean FS_IDX = false;
 	
 	// Don't forget to mkdir "~/.iris/lucene_idx" and update below.
 	protected static String DEFAULT_IDX_DIR = "/home/alexandrelucchesi/.iris/lucene_test_idx/";
