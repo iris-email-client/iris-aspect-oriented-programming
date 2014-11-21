@@ -6,7 +6,6 @@ import java.io.IOException;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.FieldType;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
@@ -19,20 +18,10 @@ import org.apache.lucene.util.Version;
 
 public class IndexManager {
 
-	/* Indexed, tokenized, stored. */
-	public static final FieldType TYPE_STORED = new FieldType();
-
-	static {
-		TYPE_STORED.setIndexed(true);
-		TYPE_STORED.setTokenized(true);
-		TYPE_STORED.setStored(true);
-		TYPE_STORED.setStoreTermVectors(true);
-		TYPE_STORED.setStoreTermVectorPositions(true);
-		TYPE_STORED.freeze();
-	}
-
 	private static Directory index;
+
 	private static IndexWriter writer;
+	
 	private static IndexReader reader;
 
 	private IndexManager() {
@@ -50,7 +39,9 @@ public class IndexManager {
 			index = FSDirectory.open(path);
 		
 		// Initializes the index with an empty document.
+		// *This is ABSOLUTELY NECESSARY!*
 		getWriter().addDocument(new Document());
+		getWriter().commit();
 
 		return index;
 	}
@@ -74,10 +65,11 @@ public class IndexManager {
 	}
 
 	public static void closeIndex() throws IOException {
+		writer.close();
 		index.close();
 		writer = null;
-		index = null;
 		reader = null;
+		index = null;
 	}
 
 	public static IndexWriter getWriter() throws IOException {

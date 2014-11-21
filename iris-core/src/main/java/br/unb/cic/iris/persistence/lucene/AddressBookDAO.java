@@ -13,10 +13,12 @@ import org.apache.lucene.document.StringField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.NumericRangeQuery;
+import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.TopDocs;
 
 import br.unb.cic.iris.core.exception.DBException;
@@ -42,17 +44,19 @@ public class AddressBookDAO extends LuceneDoc<AddressBookEntry> implements
 	public void save(AddressBookEntry entry) throws DBException {
 		try {			
 			if (entry.getId() == null) { // Create
-				create(entry);
+				throw new DBException("Can't create address book entry with no 'id'.", new Exception());
+				//create(entry);
 			} else {
-				// Checks whether a doc with the given 'id' exists in the index.
+				Query typeQuery = new TermQuery(new Term("type", "addressBook"));
+				Query idQuery = NumericRangeQuery.newLongRange("id", entry.getId(), entry.getId(), true, true);
+				
+				// Checks whether an address book entry with the given 'id' exists in the index.
 				BooleanQuery q = new BooleanQuery();
-				q.add(new BooleanClause(new TermQuery(new Term("type",
-						"addressBook")), Occur.MUST));
-				q.add(new BooleanClause(new TermQuery(new Term("id", entry
-						.getId().toString())), Occur.MUST));
+				q.add(new BooleanClause(idQuery, Occur.MUST));
+				q.add(new BooleanClause(typeQuery, Occur.MUST));
 
 				IndexSearcher searcher = IndexManager.getSearcher();
-				TopDocs docs = searcher.search(q, 1);
+				TopDocs docs = searcher.search(q, 1);				
 
 				if (docs.totalHits > 0) { // Case doc already exists, updates it!
 					int docId = docs.scoreDocs[0].doc;
@@ -112,9 +116,7 @@ public class AddressBookDAO extends LuceneDoc<AddressBookEntry> implements
 				entry = fromLuceneDoc(searcher.doc(docId));
 			}
 		} catch (IOException e) {
-			throw new DBException(
-					"An error occured while finding address book entry by nick.",
-					e);
+			throw new DBException("An error occured while finding address book entry by nick.", e);
 		}
 
 		return entry;
@@ -133,9 +135,7 @@ public class AddressBookDAO extends LuceneDoc<AddressBookEntry> implements
 			writer.deleteDocuments(q);
 			writer.commit();
 		} catch (IOException e) {
-			throw new DBException(
-					"An error occured while deleting address book entry by nick.",
-					e);
+			throw new DBException("An error occured while deleting address book entry by nick.", e);
 		}
 	}
 
