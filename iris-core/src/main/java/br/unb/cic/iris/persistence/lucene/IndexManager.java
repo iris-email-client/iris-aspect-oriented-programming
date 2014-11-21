@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Document;
 import org.apache.lucene.document.FieldType;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
@@ -47,6 +48,9 @@ public class IndexManager {
 			index = new RAMDirectory();
 		else
 			index = FSDirectory.open(path);
+		
+		// Initializes the index with an empty document.
+		getWriter().addDocument(new Document());
 
 		return index;
 	}

@@ -23,41 +23,79 @@ import br.unb.cic.iris.core.exception.DBException;
 import br.unb.cic.iris.core.model.AddressBookEntry;
 import br.unb.cic.iris.persistence.IAddressBookDAO;
 
-public class AddressBookDAO extends LuceneDoc<AddressBookEntry> implements IAddressBookDAO {
+public class AddressBookDAO extends LuceneDoc<AddressBookEntry> implements
+		IAddressBookDAO {
 
 	private static AddressBookDAO instance;
-	
-	private AddressBookDAO() { } 
-	
+
+	private AddressBookDAO() {
+	}
+
 	public static AddressBookDAO instance() {
-		if(instance == null) {
+		if (instance == null) {
 			instance = new AddressBookDAO();
 		}
 		return instance;
 	}
-	
+
 	@Override
 	public void save(AddressBookEntry entry) throws DBException {
-		try {
-			BooleanQuery q = new BooleanQuery();
-			q.add(new BooleanClause(new TermQuery(new Term("type", "addressBook")), Occur.MUST));
-			q.add(new BooleanClause(new TermQuery(new Term("id", entry.getId().toString())), Occur.MUST));
-			
-			IndexSearcher searcher = IndexManager.getSearcher();
-			TopDocs docs = searcher.search(q, 1);
-			
-			IndexWriter writer = IndexManager.getWriter();
-			if (docs.totalHits > 0) { // Update
-				int docId = docs.scoreDocs[0].doc;
-				String oldDocUUID = searcher.doc(docId).getField("uuid").stringValue();
-				// The update operation actually removes the old document and adds a new one.
-				writer.updateDocument(new Term("uuid", oldDocUUID), toLuceneDoc(entry));
-			} else { // Create
-				writer.addDocument(toLuceneDoc(entry));
+		try {			
+			if (entry.getId() == null) { // Create
+				create(entry);
+			} else {
+				// Checks whether a doc with the given 'id' exists in the index.
+				BooleanQuery q = new BooleanQuery();
+				q.add(new BooleanClause(new TermQuery(new Term("type",
+						"addressBook")), Occur.MUST));
+				q.add(new BooleanClause(new TermQuery(new Term("id", entry
+						.getId().toString())), Occur.MUST));
+
+				IndexSearcher searcher = IndexManager.getSearcher();
+				TopDocs docs = searcher.search(q, 1);
+
+				if (docs.totalHits > 0) { // Case doc already exists, updates it!
+					int docId = docs.scoreDocs[0].doc;
+					update(searcher.doc(docId), entry);
+				} else { // Otherwise, creates a new document.
+					create(entry);
+				}
 			}
+		} catch (DBException e) {
+			throw e;
+		} catch (IOException e) { // IndexSearcher related failures.
+			throw new DBException("An error occured while saving address book entry.", e);
+		}
+	}
+
+	private void create(AddressBookEntry entry) throws DBException {
+		try {
+			IndexWriter writer = IndexManager.getWriter();
+
+			StringField uuidField = new StringField("uuid", UUID.randomUUID().toString(), Store.YES);
+			Document newDoc = toLuceneDoc(entry);
+			newDoc.add(uuidField);
+			writer.addDocument(newDoc);
 			writer.commit();
 		} catch (IOException e) {
-			throw new DBException("An error occured while saving address book entry.", e);
+			throw new DBException("An error occured while creating address book entry.", e);
+		}
+	}
+	
+	private void update(Document oldDoc, AddressBookEntry entry) throws DBException {
+		try {
+			IndexWriter writer = IndexManager.getWriter();
+
+			String oldDocUUID = oldDoc.getField("uuid").stringValue();
+			// As it's an update operation, keep the previous UUID.
+			StringField uuidField = new StringField("uuid", oldDocUUID, Store.YES);
+			// The update operation actually removes the old document and adds a new one.
+			Document newDoc = toLuceneDoc(entry);
+			newDoc.add(uuidField);
+			writer.updateDocument(new Term("uuid", oldDocUUID), newDoc);
+			writer.commit();
+		} catch (IOException e) {
+			throw new DBException("An error occured while updating address book entry.", e);
 		}
 	}
 
@@ -66,16 +104,19 @@ public class AddressBookDAO extends LuceneDoc<AddressBookEntry> implements IAddr
 		AddressBookEntry entry = null;
 		try {
 			IndexSearcher searcher = IndexManager.getSearcher();
-			TopDocs docs = searcher.search(new TermQuery(new Term("nick", nick)), 1);
-			
+			TopDocs docs = searcher.search(
+					new TermQuery(new Term("nick", nick)), 1);
+
 			if (docs.totalHits > 0) {
 				int docId = docs.scoreDocs[0].doc;
 				entry = fromLuceneDoc(searcher.doc(docId));
 			}
 		} catch (IOException e) {
-			throw new DBException("An error occured while finding address book entry by nick.", e);
+			throw new DBException(
+					"An error occured while finding address book entry by nick.",
+					e);
 		}
-		
+
 		return entry;
 	}
 
@@ -83,30 +124,33 @@ public class AddressBookDAO extends LuceneDoc<AddressBookEntry> implements IAddr
 	public void delete(String nick) throws DBException {
 		try {
 			BooleanQuery q = new BooleanQuery();
-			q.add(new BooleanClause(new TermQuery(new Term("type", "addressBook")), Occur.MUST));
-			q.add(new BooleanClause(new TermQuery(new Term("nick", nick)), Occur.MUST));
-			
+			q.add(new BooleanClause(new TermQuery(new Term("type",
+					"addressBook")), Occur.MUST));
+			q.add(new BooleanClause(new TermQuery(new Term("nick", nick)),
+					Occur.MUST));
+
 			IndexWriter writer = IndexManager.getWriter();
 			writer.deleteDocuments(q);
 			writer.commit();
 		} catch (IOException e) {
-			throw new DBException("An error occured while deleting address book entry by nick.", e);
+			throw new DBException(
+					"An error occured while deleting address book entry by nick.",
+					e);
 		}
 	}
 
 	@Override
 	public Document toLuceneDoc(AddressBookEntry m) {
 		List<Field> fields = new ArrayList<Field>();
-		fields.add(new StringField("uuid", UUID.randomUUID().toString(), Store.YES));
 		fields.add(new StringField("type", "addressBook", Store.NO));
 		fields.add(new LongField("id", m.getId().longValue(), Store.YES));
 		fields.add(new StringField("nick", m.getNick(), Store.YES));
 		fields.add(new StringField("address", m.getAddress(), Store.YES));
-		
+
 		Document doc = new Document();
 		for (Field f : fields)
 			doc.add(f);
-		
+
 		return doc;
 	}
 
