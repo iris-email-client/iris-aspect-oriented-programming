@@ -163,4 +163,8 @@ public class AddressBookDAO extends LuceneDoc<AddressBookEntry> implements
 		return entry;
 	}
 
+	public List<AddressBookEntry> findAll() throws DBException {
+		throw new RuntimeException("not implemented yet");
+	}
+
 }

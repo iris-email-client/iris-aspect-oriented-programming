@@ -1,5 +1,7 @@
 package br.unb.cic.iris.persistence;
 
+import java.util.List;
+
 import br.unb.cic.iris.core.exception.DBException;
 import br.unb.cic.iris.core.model.AddressBookEntry;
 
@@ -16,4 +18,6 @@ public interface IAddressBookDAO {
 	public AddressBookEntry find(String nick) throws DBException;
 	
 	public void delete(String nick) throws DBException;
+	
+	public List<AddressBookEntry> findAll() throws DBException;
 }

@@ -19,6 +19,13 @@ public interface AddressBookFacade {
 	 * @param name the nick name
 	 */
 	public void deleteAddressBookEntry(String name) throws EmailException;
+	
+	/**
+	 * Finds an address book entry, given a specific name.
+	 * @param name the nick name
+	 * @return the corresponding address book entry
+	 */
+	public AddressBookEntry find(String name) throws EmailException;
 
 	/**
 	 * lists all address book entries

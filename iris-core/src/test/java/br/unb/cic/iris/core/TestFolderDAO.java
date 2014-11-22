@@ -17,7 +17,7 @@ public class TestFolderDAO {
 	@Before
 	public void setUp() throws Exception {
 		try {
-			dao = new FolderDAO();
+			dao = FolderDAO.instance();
 		}
 		catch(Exception e) {
 			throw new Exception("could not setUp the tests", e);

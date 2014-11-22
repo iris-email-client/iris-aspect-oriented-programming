@@ -41,6 +41,7 @@ public final class AddressBookDAO extends AbstractDAO<AddressBookEntry> implemen
 			if(entries != null && entries.size() == 1) {
 				return entries.get(0);
 			}
+			session.getTransaction().commit();
 			return null;
 		} catch(Exception e) {
 			throw new DBException("could not save the address book entry", e);	

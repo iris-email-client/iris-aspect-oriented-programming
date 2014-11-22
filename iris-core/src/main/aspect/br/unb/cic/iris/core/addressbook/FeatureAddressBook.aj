@@ -2,10 +2,11 @@ package br.unb.cic.iris.core.addressbook;
 
 import java.util.List;
 
+import br.unb.cic.iris.core.SystemFacade;
+import br.unb.cic.iris.core.exception.EmailException;
 import br.unb.cic.iris.core.model.AddressBookEntry;
 import br.unb.cic.iris.core.model.EmailMessage;
-import br.unb.cic.iris.core.exception.EmailException;
-import br.unb.cic.iris.persistence.sqlite3.AddressBookDAO;
+import br.unb.cic.iris.persistence.IAddressBookDAO;
 import br.unb.cic.iris.util.EmailValidator;
 
 /**
@@ -14,7 +15,7 @@ import br.unb.cic.iris.util.EmailValidator;
  * 
  * @author rbonifacio
  */
-public aspect FeatureAddressBook {
+public privileged aspect FeatureAddressBook {
 
 	/**
 	 * Using this aspects, we claim that SystemFacade implements
@@ -34,18 +35,23 @@ public aspect FeatureAddressBook {
 	 */
 	public void br.unb.cic.iris.core.SystemFacade.addAddressBookEntry(String name, String email) throws EmailException {
 		System.out.println("saving ab from AOP");
-		AddressBookDAO dao = AddressBookDAO.instance();
+		IAddressBookDAO dao = daoFactory.createAddressBookDAO();
 		dao.save(new AddressBookEntry(name, email));
 	}
 	
 	public void br.unb.cic.iris.core.SystemFacade.deleteAddressBookEntry(String name) throws EmailException {
-		AddressBookDAO dao = AddressBookDAO.instance();
+		IAddressBookDAO dao = daoFactory.createAddressBookDAO();
 		dao.delete(name);
 	}
 
-	public List<AddressBookEntry> br.unb.cic.iris.core.SystemFacade.listAddressBook() throws EmailException {
-		return AddressBookDAO.instance().findAll();
+	public AddressBookEntry br.unb.cic.iris.core.SystemFacade.find(String name) throws EmailException {
+		IAddressBookDAO dao = daoFactory.createAddressBookDAO();
+		return dao.find(name);
 	}
+	public List<AddressBookEntry> br.unb.cic.iris.core.SystemFacade.listAddressBook() throws EmailException {
+		return daoFactory.createAddressBookDAO().findAll();
+	}
+	
 	
 	//there is no quantification here. 
 	pointcut sendMessage(EmailMessage message) : execution(void br.unb.cic.iris.mail.EmailClient.send(EmailMessage)) && args(message);
@@ -64,7 +70,7 @@ public aspect FeatureAddressBook {
 	//email address from the address book.
 	private String findAddress(String emailAddress) throws EmailException {
 		if(emailAddress != null && !EmailValidator.validate(emailAddress)){
-			AddressBookEntry entry = AddressBookDAO.instance().find(emailAddress);
+			AddressBookEntry entry = SystemFacade.instance().find(emailAddress);
 			
 			return entry == null ? null : entry.getAddress();
 		}

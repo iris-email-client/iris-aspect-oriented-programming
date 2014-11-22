@@ -119,5 +119,10 @@ public class EmailDAO extends LuceneDoc<EmailMessage> implements IEmailDAO {
 		
 		return email;
 	}
+	
+	@Override
+	public List<EmailMessage> findByFolder(String inbox) {
+		throw new RuntimeException("not implemented yet");
+	}
 
 }

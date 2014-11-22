@@ -26,7 +26,7 @@ public abstract class AbstractDAO<T> {
             session.saveOrUpdate(obj);
             session.getTransaction().commit();
         } catch (HibernateException e) {
-            handleException(e);
+        	handleException(e);
         } finally {
         	closeSession();
         }
