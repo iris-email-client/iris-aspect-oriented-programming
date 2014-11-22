@@ -157,18 +157,4 @@ public final class SystemFacade {
 		return daoFactory;
 	}
 
-//	public void addAddressBookEntry(String name, String email) throws EmailException {
-//		AddressBookDAO dao = AddressBookDAO.instance();
-//		dao.save(new AddressBookEntry(name, email));
-//	}
-
-//	public void deleteAddressBookEntry(String name) throws EmailException {
-//		AddressBookDAO dao = AddressBookDAO.instance();
-//		dao.delete(name);
-//	}
-//
-//	public List<AddressBookEntry> listAddressBook() throws EmailException {
-//		return AddressBookDAO.instance().findAll();
-//	}
-
 }
