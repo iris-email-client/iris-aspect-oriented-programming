@@ -13,11 +13,12 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 /**
  * A class that represents an email message.
@@ -28,32 +29,32 @@ import javax.persistence.Table;
 @Table(name = "TB_MESSAGE")
 public class EmailMessage extends FolderContent {
 	
-	@Column(name="MSG_FROM")
+	@Column(name="MSG_FROM", columnDefinition = "TEXT")
 	private String from;
 	
-	@Column(name="RECIPIENT")
+	@Column(name="RECIPIENT", columnDefinition = "TEXT")
 	private String to;
 	
-	@Column(name="CC_RECIPIENT")
+	@Column(name="CC_RECIPIENT", columnDefinition = "TEXT")
 	private String cc;
 	
-	@Column(name="BCC_RECIPIENT")
+	@Column(name="BCC_RECIPIENT", columnDefinition = "TEXT")
 	private String bcc;
 	
-	@Column(name="SUBJECT")
+	@Column(name="SUBJECT", columnDefinition = "TEXT")
 	private String subject;
 	
-	@Column(name="MESSAGE_CONTENT")
+	@Column(name="MESSAGE_CONTENT", columnDefinition = "TEXT")
 	private String message;
 	
 	@Column(name="DATE")
 	private Date date;
 	
+	@Cascade({CascadeType.SAVE_UPDATE})
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "FOLDER_ID", nullable = false)
 	private IrisFolder folder;
 	
-
 	public EmailMessage() {
 	}
 

@@ -94,6 +94,9 @@ public final class SystemFacade {
 		//persist messages
 		for(EmailMessage message: messages) {
 			IrisFolder folderEntity = new FolderDAO().findByName(folder);
+			if (folderEntity == null) {
+				folderEntity = new IrisFolder(folder);
+			}
 			//folderEntity.addElement(message);
 			message.setFolder(folderEntity);
 			dao.saveMessage(message);
