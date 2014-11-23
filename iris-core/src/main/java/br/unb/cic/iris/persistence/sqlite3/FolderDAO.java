@@ -11,6 +11,14 @@ import br.unb.cic.iris.persistence.IFolderDAO;
 public class FolderDAO extends AbstractDAO<IrisFolder> implements IFolderDAO {
 	private static final String FIND_BY_NAME = "FROM IrisFolder f " + "where f.name = :pName";
 
+	private static final FolderDAO instance = new FolderDAO();
+	
+	private FolderDAO() {}
+	
+	public static final FolderDAO instance() {
+		return instance;
+	}
+	
 	public IrisFolder findByName(String folderName) throws DBException {
 		try {
 			startSession();

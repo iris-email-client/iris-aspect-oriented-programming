@@ -14,14 +14,14 @@ public abstract class TestLucene {
 	protected static boolean FS_IDX = false;
 	
 	// Don't forget to mkdir "~/.iris/lucene_idx" and update below.
-	protected static String DEFAULT_IDX_DIR = "/home/alexandrelucchesi/.iris/lucene_test_idx/";
+	protected static String DEFAULT_IDX_DIR = System.getProperty("user.home") + "/.iris/lucene_test_idx/";
 	
 	@BeforeClass
 	public static void clearFSDirectory() throws IOException {
 		if (FS_IDX) {
 			File dir = new File(DEFAULT_IDX_DIR);
 			if (!dir.exists() || !dir.isDirectory())
-				throw new IOException("Specified index directory does not exist.");
+				throw new IOException("Specified index directory does not exist. " + DEFAULT_IDX_DIR);
 			
 			// Clears the directory...
 			for (File f : dir.listFiles())

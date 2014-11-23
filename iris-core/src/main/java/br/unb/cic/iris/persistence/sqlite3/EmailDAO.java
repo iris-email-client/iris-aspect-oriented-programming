@@ -26,6 +26,7 @@ import br.unb.cic.iris.persistence.IEmailDAO;
  */
 public final class EmailDAO extends AbstractDAO<EmailMessage> implements IEmailDAO {
 	private static final String FIND_MAX_DATE = "select max(e.date) FROM EmailMessage e";
+	
 	// select o from LoadFileHistory o where o.finishDate > :today
 
 	/* the single instance of EmailDAO */
@@ -59,6 +60,11 @@ public final class EmailDAO extends AbstractDAO<EmailMessage> implements IEmailD
 			closeSession();
 		}
 		return date;
+	}
+
+	public List<EmailMessage> findByFolder(String inbox) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
