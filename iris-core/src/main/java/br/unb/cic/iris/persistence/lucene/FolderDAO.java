@@ -1,17 +1,16 @@
 package br.unb.cic.iris.persistence.lucene;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field.Store;
-import org.apache.lucene.document.IntField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
@@ -42,11 +41,11 @@ public class FolderDAO implements IFolderDAO {
 	 * @return The folder.
 	 * @throws DBException 
 	 */
-	public IrisFolder findById(int folderId) throws DBException {
+	public IrisFolder findById(String folderId) throws DBException {
 		IrisFolder folder = null;
 		try {
 			Query typeQuery = new TermQuery(new Term("type", "irisFolder"));
-			Query idQuery = NumericRangeQuery.newIntRange("id", folderId, folderId, true, true);
+			Query idQuery = new TermQuery(new Term("id", folderId));
 
 			// Checks whether a folder with the given 'name' exists in the index.
 			BooleanQuery q = new BooleanQuery();
@@ -97,7 +96,7 @@ public class FolderDAO implements IFolderDAO {
 				IrisFolder folder = rootFolder;
 				boolean finish = false;
 				while (!finish) {
-					Query idQuery = NumericRangeQuery.newIntRange("parentId", folder.getId(), folder.getId(), true, true);
+					Query idQuery = new TermQuery(new Term("parentId", folder.getId()));
 					
 					// Search for folder or e-mails inside the 'rootFolder'.
 					q = new BooleanQuery();
@@ -135,13 +134,16 @@ public class FolderDAO implements IFolderDAO {
 		return rootFolder;
 	}
 	
+	// IMPORTANT: This method will need to be updated to support multiple folders. Probably, there'll be a property 
+	// `IrisFolder parent` in the `IrisFolder` class, so that a folder object knows its parent. 
 	public void save(IrisFolder folder) throws DBException {
 		try {			
 			if (folder.getId() == null) { // Create
-				throw new DBException("Can't create folder with no 'id'.", new Exception());
+				create(null, folder);
+				IndexManager.getWriter().commit();
 			} else {
 				Query typeQuery = new TermQuery(new Term("type", "irisFolder"));
-				Query idQuery = NumericRangeQuery.newIntRange("id", folder.getId().intValue(), folder.getId(), true, true);
+				Query idQuery = new TermQuery(new Term("id", folder.getId()));
 				
 				// Checks whether a folder with the given 'id' exists in the index.
 				BooleanQuery q = new BooleanQuery();
@@ -151,9 +153,8 @@ public class FolderDAO implements IFolderDAO {
 				IndexSearcher searcher = IndexManager.getSearcher();
 				TopDocs docs = searcher.search(q, 1);				
 
-				if (docs.totalHits > 0) { // Case doc already exists, updates it!
-					int docId = docs.scoreDocs[0].doc;
-					update(searcher.doc(docId), folder);
+				if (docs.totalHits > 0) { // Case doc exists, updates it!
+					update(folder);
 				} else { // Otherwise, creates a new document.
 					create(null, folder);
 					// Commit is done here because a lot of adds are doing inside 'create'.
@@ -173,124 +174,48 @@ public class FolderDAO implements IFolderDAO {
 		}
 	}
 	
+	// IMPORTANT: After calling this function, call `IndexManager.getWriter().commit()`.
 	private void create(IrisFolder parent, FolderContent content) throws IOException {
 		Document doc = null;
+		
+		//if (content.getId() == null)
+		content.setId(UUID.randomUUID().toString());
+		
 		if (content instanceof EmailMessage) {
 			doc = EmailDAO.instance().toLuceneDoc((EmailMessage) content);
 		} else if (content instanceof IrisFolder) {
 			IrisFolder folder = (IrisFolder) content;
 			doc = toLuceneDoc(folder);
-			for (FolderContent fc : folder.getContents()) {
+			for (FolderContent fc : folder.getContents())
 				create(folder, fc);
-			}
 		}
 		
-		doc.add(new IntField("parentId", parent != null ? parent.getId().intValue() : -1, Store.YES));
+		if (parent != null) { // Root folders do not have a field 'parentId'.
+			doc.add(new StringField("parentId", parent.getId(), Store.YES));
+		}
+		
+		doc.add(new StringField("id", content.getId(), Store.YES));
+		
 		IndexManager.getWriter().addDocument(doc);
 	}
 
 	// TODO: Implement!
-	private void update(Document oldDoc, IrisFolder entry) throws DBException {
+	private void update(IrisFolder folder) throws DBException {
 		throw new DBException("Update is not implemented yet!", new Exception());
 	}
 	
 	private Document toLuceneDoc(IrisFolder folder) {
 		Document folderDoc = new Document();
 		folderDoc.add(new StringField("type", "irisFolder", Store.YES));
-		folderDoc.add(new IntField("id", folder.getId().intValue(), Store.YES));
 		folderDoc.add(new StringField("name", folder.getName(), Store.YES));
 		return folderDoc;
 	}
 	
 	private IrisFolder fromLuceneDoc(Document doc) {
 		IrisFolder folder = new IrisFolder();
-		folder.setId(doc.getField("id").numericValue().intValue());
+		folder.setId(doc.getField("id").stringValue());
 		folder.setName(doc.getField("name").stringValue());
 		return folder;
 	}
-	
-//	private void create(IrisFolder folder) throws DBException {
-//		try {
-//			IndexWriter writer = IndexManager.getWriter();
-//
-//			Node<Document> folderTree = toLuceneDoc(folder);
-//			StringField rootUUIDField = new StringField("uuid", UUID.randomUUID().toString(), Store.YES);
-//			folderTree.value.add(rootUUIDField);
-//			
-//			for (Node<Document> node : folderTree.children) {
-//				String type = node.value.getField("type").stringValue();
-//				if (type.equals("irisFolder")) {
-//					
-//				} else if (type.equals("irisFolder")) {
-//					
-//				} else {
-//					throw new Exception("Can't handle type '" + type + "'.");
-//				}
-//			}
-//			
-//			
-//			
-//			Document newDoc = toLuceneDoc(folder);
-//			newDoc.add(uuidField);
-//			writer.addDocument(newDoc);
-			
-//			writer.commit();
-//		} catch (IOException e) {
-//			throw new DBException("An error occured while creating address book entry.", e);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-//	
-//	private void update(Document oldDoc, IrisFolder entry) throws DBException {
-//		try {
-//			IndexWriter writer = IndexManager.getWriter();
-//
-//			String oldDocUUID = oldDoc.getField("uuid").stringValue();
-//			// As it's an update operation, keep the previous UUID.
-//			StringField uuidField = new StringField("uuid", oldDocUUID, Store.YES);
-//			// The update operation actually removes the old document and adds a new one.
-//			Document newDoc = toLuceneDoc(entry);
-//			newDoc.add(uuidField);
-//			writer.updateDocument(new Term("uuid", oldDocUUID), newDoc);
-//			writer.commit();
-//		} catch (IOException e) {
-//			throw new DBException("An error occured while updating address book entry.", e);
-//		}
-//	}
-//	
-//				
-//	private class Node<T> {
-//		private T value;
-//		private List<Node<T>> children;
-//	}
-//	
-//	private Node<Document> toLuceneDoc(IrisFolder folder) throws Exception {
-//		Document folderDoc = new Document();
-//		folderDoc.add(new StringField("type", "irisFolder", Store.NO));
-//		folderDoc.add(new IntField("id", folder.getId().intValue(), Store.YES));
-//		folderDoc.add(new StringField("name", folder.getName(), Store.YES));
-//
-//		Node<Document> folderTree = new Node<Document>();
-//		folderTree.value = folderDoc;
-//		folderTree.children = new ArrayList<Node<Document>>();
-//
-//		for (FolderContent fc : folder.getContents()) {
-//			if (fc instanceof EmailMessage) {
-//				Document emailDoc = EmailDAO.instance().toLuceneDoc((EmailMessage) fc);
-//				Node<Document> emailLeaf = new Node<Document>();
-//				emailLeaf.value = emailDoc;
-//				emailLeaf.children = null;
-//				folderTree.children.add(emailLeaf);
-//			} else if (fc instanceof IrisFolder) {
-//				Node<Document> childFolderTree = toLuceneDoc((IrisFolder) fc);
-//				folderTree.children.add(childFolderTree);
-//			} else {
-//				throw new Exception("Can't handle type: '" + fc.getClass().getName() + "'.");
-//			}
-//		}
-//		
-//		return folderTree;
-//	}
 
 }

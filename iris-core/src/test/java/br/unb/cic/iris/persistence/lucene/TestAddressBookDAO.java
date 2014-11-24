@@ -25,55 +25,71 @@ public class TestAddressBookDAO extends TestLucene {
 		entry = new AddressBookEntry();
 		entry.setNick("Alexandre Lucchesi");
 		entry.setAddress("alexandrelucchesi@gmail.com");
-		entry.setId(19L);
+		entry.setId("19");
 	}
 	
 	@Test
-	public void testSaveWithoutId() throws DBException {
+	public void testCreate() throws DBException {
 		try {
 			entry.setId(null);
 			addressBookDAO.save(entry);
-			fail("Entry should not be saved without an 'id'.");
 		} catch (DBException e) {}
 		
 		AddressBookEntry entry2 = addressBookDAO.find("Alexandre Lucchesi");
-		assertNull("Object should not be in the index.", entry2);
-	}
-	
-	@Test
-	public void testSaveWithId() throws DBException, IOException {
-		addressBookDAO.save(entry);
-		AddressBookEntry entry2 = addressBookDAO.find("Alexandre Lucchesi");
+		
+		assertNotNull("Object should be in the index.", entry2);
 		assertEquals(entry.getId(), entry2.getId());
 		assertEquals(entry.getNick(), entry2.getNick());
 		assertEquals(entry.getAddress(), entry2.getAddress());
 	}
 	
+	
+	@Test
+	public void testFind() throws DBException, IOException {
+		testCreate();
+		AddressBookEntry entry = addressBookDAO.find("Alexandre Lucchesi");
+		assertNotNull("Entry should exist.", entry);
+	}
+
+	
 	@Test
 	public void testUpdate() throws DBException {
+		// Creates an entry in the index.
+		entry.setId(null);
 		addressBookDAO.save(entry);
-		AddressBookEntry orig = addressBookDAO.find("Alexandre Lucchesi");
-		assertNotNull(orig);
-		assertEquals(entry.getAddress(), orig.getAddress());
 		
+		// Entry was successfully created an now has an id.
+		String previousId = entry.getId();
+		assertNotNull(previousId);
+		
+		// Updates entry.
 		entry.setNick("Rodrigo Bonifácio");
 		entry.setAddress("rbonifacio123@gmail.com");
 		addressBookDAO.save(entry);
 		
+		// The id is kept after update.
+		assertEquals(previousId, entry.getId());
+		
+		// The previous entry was deleted.
 		assertNull(addressBookDAO.find("Alexandre Lucchesi"));
 		
-		AddressBookEntry novel = addressBookDAO.find("Rodrigo Bonifácio");
-		assertNotNull(novel);
-		assertEquals(entry.getAddress(), novel.getAddress());
-		
-		assertEquals(orig.getId(), novel.getId());
+		// The new entry is found.
+		assertNotNull(addressBookDAO.find("Rodrigo Bonifácio"));
 	}
 	
+	
 	@Test
-	public void testFind() throws DBException, IOException {
-		testSaveWithId();
-		AddressBookEntry entry = addressBookDAO.find("Alexandre Lucchesi");
-		assertNotNull("Entry should exist.", entry);
+	public void testUpdateWithInvalidId() throws DBException, IOException {
+		try {
+			addressBookDAO.save(entry);
+		} catch (DBException e) {
+			AddressBookEntry entry2 = addressBookDAO.find("Alexandre Lucchesi");
+			assertNull("Object should not be in the index.", entry2);			
+			return;
+		}
+		
+		fail("Entry should not be saved with an 'id' that does not exist in the index.");
 	}
+
 	
 }

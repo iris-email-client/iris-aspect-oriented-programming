@@ -16,8 +16,8 @@ import javax.persistence.Table;
 public class AddressBookEntry {
 
 	@Id
-	@GeneratedValue
-	private Long id;
+	//@GeneratedValue
+	private String id;
 	
 	@Column(unique=true)
 	private String nick;
@@ -32,11 +32,11 @@ public class AddressBookEntry {
 		this.address = address;
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 	
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	

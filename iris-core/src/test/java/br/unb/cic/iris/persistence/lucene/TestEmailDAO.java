@@ -2,6 +2,8 @@ package br.unb.cic.iris.persistence.lucene;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -38,7 +40,7 @@ public class TestEmailDAO extends TestLucene {
 			e.printStackTrace();
 		}
 		msg1.setDate(date);
-		msg1.setFolder(new IrisFolder(19, "UnB"));
+		msg1.setFolder(new IrisFolder("19", "UnB"));
 		
 		msg2 = new EmailMessage();
 		msg2.setFrom("jeremiasmg@gmail.com");
@@ -54,17 +56,50 @@ public class TestEmailDAO extends TestLucene {
 			e.printStackTrace();
 		}
 		msg2.setDate(date);
-		msg2.setFolder(new IrisFolder(19, "UnB"));
+		msg2.setFolder(new IrisFolder("19", "UnB"));
 	}
 	
 	@Test
-	public void testSaveMessage() throws DBException {
+	public void testCreate() throws DBException {
 		emailDAO.saveMessage(msg1);
 		emailDAO.saveMessage(msg2);
 	}
 	
 	@Test
-	public void testSaveWithId() throws DBException, IOException {
+	public void testUpdate() throws DBException {
+		// Creates an entry in the index.
+		msg1.setId(null);
+		emailDAO.saveMessage(msg1);
+		
+		// Entry was successfully created an now has an id.
+		String previousId = msg1.getId();
+		assertNotNull(previousId);
+		
+		// Updates entry.
+		String from = msg1.getFrom();
+		msg1.setFrom(msg1.getTo());
+		msg1.setTo(from);
+		emailDAO.saveMessage(msg1);
+		
+		// The id is kept after update.
+		assertEquals(previousId, msg1.getId());
+	}
+	
+	
+	@Test
+	public void testUpdateWithInvalidId() throws DBException, IOException {
+		try {
+			msg1.setId("19");
+			emailDAO.saveMessage(msg1);
+		} catch (DBException e) {
+			return;
+		}
+		
+		fail("Message should not be saved with an 'id' that does not exist in the index.");
+	}
+	
+	@Test
+	public void testLastMessage() throws DBException, IOException {
 		assertNotEquals(msg1.getDate(), msg2.getDate());
 		
 		emailDAO.saveMessage(msg1);
