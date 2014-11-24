@@ -18,14 +18,31 @@ import br.unb.cic.iris.core.model.EmailMessage;
 import br.unb.cic.iris.core.model.IrisFolder;
 import br.unb.cic.iris.persistence.IEmailDAO;
 
+import br.unb.cic.iris.persistence.lucene.EmailDAO;
+
 public class TestEmailDAO extends TestLucene {
 
-	private static IEmailDAO emailDAO = EmailDAO.instance();
+	//private IEmailDAO emailDAO;
+	private IEmailDAO emailDAO = EmailDAO.instance();
 	
 	private EmailMessage msg1, msg2;
 	
+//	static {
+//		FS_IDX = true;
+//		DEFAULT_IDX_DIR = LuceneDAOFactory.INDEX_DIR;
+//	}
+	
+//	@Override
+//	@Before
+//	public void setUpIndex() throws IOException {
+//		// Empty override, so that the class `IndexManager` is set statically by 
+//		// `LuceneDAOFactory` (loaded on `setUp()` method).
+//	};
+	
 	@Before
 	public void setUp() throws IOException {
+		//emailDAO = LuceneDAOFactory.getInstance().createEmailDAO();
+		
 		msg1 = new EmailMessage();
 		msg1.setFrom("alexandrelucchesi@gmail.com");
 		msg1.setTo("rbonifacio123@gmail.com");
