@@ -7,7 +7,6 @@ import java.util.List;
 import br.unb.cic.iris.core.exception.DBException;
 import br.unb.cic.iris.core.model.EmailMessage;
 import br.unb.cic.iris.core.model.Tag;
-import br.unb.cic.iris.core.model.TagName;
 import br.unb.cic.iris.persistence.ITagDAO;
 
 public final class TagDAO extends AbstractDAO<Tag> implements ITagDAO{
@@ -15,26 +14,28 @@ public final class TagDAO extends AbstractDAO<Tag> implements ITagDAO{
 	//Singleton pattern
 	private static TagDAO instance = new TagDAO();
 	
-	private TagDAO(){}
+	private TagDAO(){
+		startSession();
+	}
 	
 	public static TagDAO instance() {
 		return instance;
 	}
 	
 	//Hibernate Queries
-	private static final String FIND_BY_NAME = "FROM TagName tName WHERE tName.name = :pName";
-	private static final String FIND_BY_MESSAGE = "FROM Tag t WHERE t.message = :pMessage";
+	private static final String FIND_BY_NAME = "FROM Tag t WHERE t.name = :pName";
+	private static final String FIND_BY_MESSAGE = "FROM Tag t WHERE :pMessage IN ELEMENTS(t.messages)";
 	
 	@Override
 	public Tag findOrCreateByName(String name) throws DBException {
 		try {
 			startSession();
-			TagName tagName = (TagName) session.createQuery(FIND_BY_NAME).setParameter("pName", name).uniqueResult();
-			if (tagName == null) {
-				tagName = new TagName(name);
+			Tag tag = (Tag) session.createQuery(FIND_BY_NAME).setParameter("pName", name).uniqueResult();
+			if (tag == null) {
+				tag = new Tag(name);
 			}
 			
-			return new Tag(tagName);
+			return tag;
 		} catch (Exception e) {
 			throw new DBException(message("error.unknown.database.error"), e);
 		} finally {
@@ -55,6 +56,12 @@ public final class TagDAO extends AbstractDAO<Tag> implements ITagDAO{
 		} finally {
 			closeSession();
 		}
+	}
+	
+	@Override
+	protected void finalize() throws Throwable {
+		closeSession();
+		super.finalize();
 	}
 	
 }

@@ -25,8 +25,10 @@ public class TestTagDAO {
 	private IrisFolder folder;
 	
 	private Tag tag1;
+	private Tag tag2;
 	
 	private final static String TAG_NAME1 = "tag teste 1";
+	private final static String TAG_NAME2 = "tag teste 2";
 	
 	@Before
 	public void setUp() throws Exception {
@@ -57,22 +59,53 @@ public class TestTagDAO {
 		try {
 			
 			tag1 = tagDao.findOrCreateByName(TAG_NAME1);
-			tag1.setMessage(message1);
+			tag1.getMessages().add(message1);
 			tagDao.saveOrUpdate(tag1);
 			
 			List<Tag> tags = tagDao.findTagsByEmailMessage(message1);
 			
-			Assert.assertTrue("The retrieved set of tags for message1 does not contain added tag!", tags.contains(tag1));
+			Assert.assertTrue("The retrieved set of tags for message1 does not contain added tag1!", tags.contains(tag1));
+			
+			tag2 = tagDao.findOrCreateByName(TAG_NAME2);
+			tag2.getMessages().add(message1);
+			tagDao.saveOrUpdate(tag2);
+			
+			tags = tagDao.findTagsByEmailMessage(message1);
+			
+			Assert.assertTrue("The retrieved set of tags for message1 does not contain added tag1!", tags.contains(tag1));
+			Assert.assertTrue("The retrieved set of tags for message1 does not contain added tag2!", tags.contains(tag2));
+			for (Tag t : tags) {
+				Assert.assertTrue("Tag " + t.getName() + " should have message1 but doens't!", t.getMessages().contains(message1));
+			}
+			
 		}
 		catch(Exception e) {
 			throw new Exception("Failed while testing! Exception occured.", e);
 		}
 	}
 	
+//	@Test
+//	public void removeTagFromMessage() throws Exception {
+//		tag1 = tagDao.findOrCreateByName(TAG_NAME1);
+//		tag1.getMessages().add(message2);
+//		tagDao.saveOrUpdate(tag1);
+//		
+//		List<Tag> tags = tagDao.findTagsByEmailMessage(message2);
+//		
+//		Assert.assertTrue("The retrieved set of tags for message2 does not contain added tag1!", tags.contains(tag1));
+//		
+//		tag1 = tagDao.findOrCreateByName(TAG_NAME1);
+//		tag1.getMessages().remove(message2);
+//		tagDao.saveOrUpdate(tag1);
+//		
+//		Assert.assertTrue("Failed to remove tag1 from message2!", !tags.contains(tag1));
+//	}
+	
 	@After
 	public void tearDown() throws Exception {
 		try {
 			tagDao.delete(tag1);
+			tagDao.delete(tag2);
 			emailDao.delete(message1);
 			emailDao.delete(message2);
 			folderDao.delete(folder);

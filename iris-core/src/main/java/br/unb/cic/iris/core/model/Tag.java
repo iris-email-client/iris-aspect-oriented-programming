@@ -1,12 +1,16 @@
 package br.unb.cic.iris.core.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
@@ -20,21 +24,20 @@ public class Tag {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	
-	@Cascade({CascadeType.SAVE_UPDATE})
-	@JoinColumn(nullable = false)
-	@ManyToOne(optional = false, fetch = FetchType.EAGER)
-	private TagName tagName;
+	@Column(columnDefinition = "TEXT", nullable = false, unique = true)
+	private String name;
 	
-	@JoinColumn
-	@ManyToOne(fetch = FetchType.LAZY)
-	private EmailMessage message;
+	@Cascade({CascadeType.DETACH})
+	@JoinTable(name = "TB_TAG_MESSAGE")
+	@ManyToMany(fetch = FetchType.EAGER)
+	private Set<EmailMessage> messages;
 	
 	public Tag() {
 		this(null);
 	}
 	
-	public Tag(TagName tagName) {
-		this.tagName = tagName;
+	public Tag(String name) {
+		this.name = name;
 	}
 
 	public Integer getId() {
@@ -46,22 +49,30 @@ public class Tag {
 	}
 
 	public String getName() {
-		return tagName.getName();
+		return name;
 	}
 
-	public EmailMessage getMessage() {
-		return message;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public void setMessage(EmailMessage message) {
-		this.message = message;
+	public Set<EmailMessage> getMessages() {
+		if (messages == null) {
+			messages = new HashSet<EmailMessage>();
+		}
+		return messages;
+	}
+
+	public void setMessages(Set<EmailMessage> messages) {
+		this.messages = messages;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((tagName == null) ? 0 : tagName.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
 
@@ -74,10 +85,15 @@ public class Tag {
 		if (getClass() != obj.getClass())
 			return false;
 		Tag other = (Tag) obj;
-		if (tagName == null) {
-			if (other.tagName != null)
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!tagName.equals(other.tagName))
+		} else if (!id.equals(other.id))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
 			return false;
 		return true;
 	}
