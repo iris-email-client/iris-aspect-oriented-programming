@@ -18,7 +18,6 @@
         <mapping class="br.unb.cic.iris.core.model.EmailMessage" />
         <mapping class="br.unb.cic.iris.core.model.IrisFolder" />
         <mapping class="br.unb.cic.iris.core.model.Tag" />
-        <mapping class="br.unb.cic.iris.core.model.TagName" />
              
     </session-factory>
 </hibernate-configuration>

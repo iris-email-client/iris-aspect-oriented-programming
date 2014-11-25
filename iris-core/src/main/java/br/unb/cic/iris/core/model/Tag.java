@@ -29,7 +29,7 @@ public class Tag {
 	
 	@Cascade({CascadeType.DETACH})
 	@JoinTable(name = "TB_TAG_MESSAGE")
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY)
 	private Set<EmailMessage> messages;
 	
 	public Tag() {

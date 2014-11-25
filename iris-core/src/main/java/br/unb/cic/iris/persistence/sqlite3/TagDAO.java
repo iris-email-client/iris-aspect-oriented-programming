@@ -9,14 +9,12 @@ import br.unb.cic.iris.core.model.EmailMessage;
 import br.unb.cic.iris.core.model.Tag;
 import br.unb.cic.iris.persistence.ITagDAO;
 
-public final class TagDAO extends AbstractDAO<Tag> implements ITagDAO{
+public final class TagDAO extends PersistentSessionAbstractDAO<Tag> implements ITagDAO{
 
 	//Singleton pattern
 	private static TagDAO instance = new TagDAO();
 	
-	private TagDAO(){
-		startSession();
-	}
+	private TagDAO(){}
 	
 	public static TagDAO instance() {
 		return instance;
@@ -38,8 +36,6 @@ public final class TagDAO extends AbstractDAO<Tag> implements ITagDAO{
 			return tag;
 		} catch (Exception e) {
 			throw new DBException(message("error.unknown.database.error"), e);
-		} finally {
-			closeSession();
 		}
 	}
 
@@ -53,15 +49,7 @@ public final class TagDAO extends AbstractDAO<Tag> implements ITagDAO{
 			return tags;
 		} catch (Exception e) {
 			throw new DBException(message("error.unknown.database.error"), e);
-		} finally {
-			closeSession();
 		}
-	}
-	
-	@Override
-	protected void finalize() throws Throwable {
-		closeSession();
-		super.finalize();
 	}
 	
 }
