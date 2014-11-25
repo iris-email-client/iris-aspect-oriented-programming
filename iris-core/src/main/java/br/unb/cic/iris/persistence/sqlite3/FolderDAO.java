@@ -34,4 +34,10 @@ public class FolderDAO extends AbstractDAO<IrisFolder> implements IFolderDAO {
 			closeSession();
 		}
 	}
+
+	@Override
+	public void save(IrisFolder folder) throws DBException {
+		// TODO Auto-generated method stub
+		throw new DBException("Not implemented yet!", new Exception());
+	}
 }

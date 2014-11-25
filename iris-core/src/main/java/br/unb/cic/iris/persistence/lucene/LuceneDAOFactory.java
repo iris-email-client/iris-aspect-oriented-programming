@@ -2,6 +2,7 @@ package br.unb.cic.iris.persistence.lucene;
 
 import java.io.File;
 
+import br.unb.cic.iris.core.model.IrisFolder;
 import br.unb.cic.iris.persistence.DAOFactory;
 import br.unb.cic.iris.persistence.IAddressBookDAO;
 import br.unb.cic.iris.persistence.IEmailDAO;
@@ -22,41 +23,28 @@ public class LuceneDAOFactory implements DAOFactory {
 				System.exit(0); // "Could not create directory: '" + INDEX_DIR + "'."
 		} else if (path.isDirectory()) {
 			try {
-				if (path.list().length > 0) // Index already exists
+				if (path.list().length > 0) { // Index already exists
 					IndexManager.setIndex(INDEX_DIR);
-				else
+				} else { // Index has to be created
 					IndexManager.createIndex(INDEX_DIR);
+					
+					// Creates the standard folders in the index
+					IFolderDAO folderDAO = createFolderDAO();
+					folderDAO.save(new IrisFolder("INBOX"));
+					folderDAO.save(new IrisFolder("OUTBOX"));
+				}
 			} catch (Exception e) {
 				System.exit(0);
 			}
 		}
 	}
 	
-	public static LuceneDAOFactory getInstance() {
+	public static LuceneDAOFactory instance() {
 		if (instance == null)
 			instance = new LuceneDAOFactory();
 		
 		return instance;
 	}
-	
-	// Initalizes class `IndexManager`.
-//	static {
-//		File path = new File(INDEX_DIR);
-//		if (!path.exists()) {
-//			boolean status = path.mkdir();
-//			if (!status)
-//				System.exit(0); // "Could not create directory: '" + INDEX_DIR + "'."
-//		} else if (path.isDirectory()) {
-//			try {
-//				if (path.list().length > 0) // Index already exists
-//					IndexManager.setIndex(INDEX_DIR);
-//				else
-//					IndexManager.createIndex(INDEX_DIR);
-//			} catch (Exception e) {
-//				System.exit(0);
-//			}
-//		}
-//	}
 
 	public IAddressBookDAO createAddressBookDAO() {
 		return AddressBookDAO.instance();

@@ -134,8 +134,10 @@ public class FolderDAO implements IFolderDAO {
 		return rootFolder;
 	}
 	
+	
 	// IMPORTANT: This method will need to be updated to support multiple folders. Probably, there'll be a property 
-	// `IrisFolder parent` in the `IrisFolder` class, so that a folder object knows its parent. 
+	// `IrisFolder parent` in the `IrisFolder` class, so that a folder object knows its parent.
+	@Override
 	public void save(IrisFolder folder) throws DBException {
 		try {			
 			if (folder.getId() == null) { // Create
@@ -144,7 +146,7 @@ public class FolderDAO implements IFolderDAO {
 			} else {
 				Query typeQuery = new TermQuery(new Term("type", "irisFolder"));
 				Query idQuery = new TermQuery(new Term("id", folder.getId()));
-				
+
 				// Checks whether a folder with the given 'id' exists in the index.
 				BooleanQuery q = new BooleanQuery();
 				q.add(new BooleanClause(typeQuery, Occur.MUST));
@@ -171,7 +173,7 @@ public class FolderDAO implements IFolderDAO {
 				e1.printStackTrace();
 			}
 			throw new DBException("An error occured while saving folder.", e);
-		}
+		}		
 	}
 	
 	// IMPORTANT: After calling this function, call `IndexManager.getWriter().commit()`.
@@ -217,5 +219,6 @@ public class FolderDAO implements IFolderDAO {
 		folder.setName(doc.getField("name").stringValue());
 		return folder;
 	}
+
 
 }

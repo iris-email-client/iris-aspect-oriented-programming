@@ -41,7 +41,7 @@ public class TestEmailDAO extends TestLucene {
 	
 	@Before
 	public void setUp() throws IOException {
-		//emailDAO = LuceneDAOFactory.getInstance().createEmailDAO();
+		//emailDAO = LuceneDAOFactory.instance().createEmailDAO();
 		
 		msg1 = new EmailMessage();
 		msg1.setFrom("alexandrelucchesi@gmail.com");

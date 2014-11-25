@@ -23,7 +23,7 @@ public class TestFolderDAO extends TestLucene {
 	
 	private static FolderDAO folderDAO = FolderDAO.instance();
 	
-	private IrisFolder inbox, outbox;
+	private IrisFolder folder1, folder2;
 	
 	private EmailMessage email1, email2, email3;
 	
@@ -81,35 +81,35 @@ public class TestFolderDAO extends TestLucene {
 		email3.setDate(date);
 		
 		// Creates the inbox and outbox folders.
-		inbox = new IrisFolder();
-		inbox.setName("INBOX");
-		inbox.addElement(email1);
-		inbox.addElement(email2);
+		folder1 = new IrisFolder();
+		folder1.setName("FOLDER1");
+		folder1.addElement(email1);
+		folder1.addElement(email2);
 		
-		outbox = new IrisFolder();
-		outbox.setName("OUTBOX");
-		outbox.addElement(email3);
+		folder2 = new IrisFolder();
+		folder2.setName("FOLDER2");
+		folder2.addElement(email3);
 	}
-	
+		
 	@Test
 	public void testSave() throws IOException, DBException {
-		folderDAO.save(inbox);
-		folderDAO.save(outbox);
-		assertNotNull(inbox.getId());
-		assertNotNull(outbox.getId());
+		folderDAO.save(folder1);
+		folderDAO.save(folder2);
+		assertNotNull(folder1.getId());
+		assertNotNull(folder2.getId());
 	}
 	
 	@Test
 	public void testFindByName() throws DBException {
-		folderDAO.save(inbox);
+		folderDAO.save(folder1);
 		
-		IrisFolder folder = folderDAO.findByName(inbox.getName());
+		IrisFolder folder = folderDAO.findByName(folder1.getName());
 		assertNotNull(folder);
-		assertEquals(folder.getName(), inbox.getName());
-		assertEquals(folder.getId(), inbox.getId());
+		assertEquals(folder.getName(), folder1.getName());
+		assertEquals(folder.getId(), folder1.getId());
 		
 		List<FolderContent> contents = folder.getContents();
-		assertEquals(contents.size(), inbox.getContents().size());
+		assertEquals(contents.size(), folder1.getContents().size());
 		
 		List<String> contentIDs = new ArrayList<String>();
 		for (FolderContent fc : contents) {
@@ -118,6 +118,12 @@ public class TestFolderDAO extends TestLucene {
 		
 		assertTrue(contentIDs.contains(email1.getId()));
 		assertTrue(contentIDs.contains(email2.getId()));
+	}
+	
+	@Test
+	public void testStandardFolders() throws DBException {
+		folderDAO.findByName("INBOX");
+		folderDAO.findByName("OUTBOX");
 	}
 	
 //	@Override
