@@ -33,10 +33,15 @@ public class IndexManager {
 			path = new File(filepath);
 		}
 
-		if (path == null || !path.exists())
+		if (path == null || !path.exists() || !path.isDirectory()) {
 			index = new RAMDirectory();
-		else
+		} else {
+			// Clears the directory...
+			for (File f : path.listFiles())
+				f.delete();
+			
 			index = FSDirectory.open(path);
+		}
 		
 		// Initializes the index with an empty document.
 		// *This is ABSOLUTELY NECESSARY!*

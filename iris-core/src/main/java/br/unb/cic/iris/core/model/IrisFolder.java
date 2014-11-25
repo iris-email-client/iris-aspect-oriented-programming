@@ -43,7 +43,7 @@ public class IrisFolder extends FolderContent {
 		this(null,name);
 	}
 
-	public IrisFolder(Integer id, String name) {
+	public IrisFolder(String id, String name) {
 		super(id);
 		this.name = name;
 		contents = new ArrayList<FolderContent>();

@@ -21,8 +21,7 @@ import org.hibernate.annotations.CascadeType;
 public class Tag {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+	private String id;
 	
 	@Column(columnDefinition = "TEXT", nullable = false, unique = true)
 	private String name;
@@ -40,11 +39,11 @@ public class Tag {
 		this.name = name;
 	}
 
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

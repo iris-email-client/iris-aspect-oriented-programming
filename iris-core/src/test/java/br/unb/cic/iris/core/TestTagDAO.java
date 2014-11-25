@@ -2,6 +2,7 @@ package br.unb.cic.iris.core;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -27,8 +28,9 @@ public class TestTagDAO {
 	private Tag tag1;
 	private Tag tag2;
 	
-	private final static String TAG_NAME1 = "tag teste 1";
-	private final static String TAG_NAME2 = "tag teste 2";
+	private final static String TAG_NAME1 = UUID.randomUUID().toString();
+	private final static String TAG_NAME2 = UUID.randomUUID().toString();
+	private final static String TEST_FOLDER_NAME = UUID.randomUUID().toString();
 	
 	@Before
 	public void setUp() throws Exception {
@@ -37,9 +39,10 @@ public class TestTagDAO {
 			emailDao = EmailDAO.instance();
 			folderDao = FolderDAO.instance();
 			
-			folder = folderDao.findByName("test-folder");
+			folder = folderDao.findByName(TEST_FOLDER_NAME);
 			if (folder == null) {
-				folder = new IrisFolder("test-folder");
+				folder = new IrisFolder(TEST_FOLDER_NAME);
+				folderDao.saveOrUpdate(folder);
 			}
 			
 			message = new EmailMessage("email-to-test@test.com", "email-to-test@test.com", "email-to-test@test.com", "email-to-test@test.com", "test subject 1", "test message 1");
@@ -93,7 +96,6 @@ public class TestTagDAO {
 		Assert.assertTrue("The retrieved set of tags for message does not contain added tag1!", tags.contains(tag1));
 		
 		tag1 = tagDao.findOrCreateByName(TAG_NAME1);
-		Set<EmailMessage> msgs = tag1.getMessages();
 		tag1.getMessages().remove(message);
 		tagDao.saveOrUpdate(tag1);
 		

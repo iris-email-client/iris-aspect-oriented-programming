@@ -33,20 +33,20 @@ public abstract class FolderContent {
 		this(null);
 	}
 
-	public FolderContent(Integer id) {
+	public FolderContent(String id) {
 		super();
 		this.id = id;
 	}
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.TABLE)
-	private Integer id;
+	//@GeneratedValue(strategy = GenerationType.TABLE)
+	private String id;
 
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,80 +23,107 @@ public class TestFolderDAO extends TestLucene {
 	
 	private static FolderDAO folderDAO = FolderDAO.instance();
 	
-	private IrisFolder rootFolder;
+	private IrisFolder folder1, folder2;
 	
-	private EmailMessage childEmail1, childEmail2;
+	private EmailMessage email1, email2, email3;
 	
-	static {
-		FS_IDX = true;
-	}
+//	static {
+//		FS_IDX = true;
+//	}
 	
 	@Before
-	public void setUp() throws IOException {		
-		// Creates two e-mail messages.
-		childEmail1 = new EmailMessage();
-		childEmail1.setFrom("alexandrelucchesi@gmail.com");
-		childEmail1.setTo("rbonifacio123@gmail.com");
-		childEmail1.setCc("jeremiasmg@gmail.com");
-		childEmail1.setBcc("somebcc@gmail.com");
-		childEmail1.setSubject("Some subject");
-		childEmail1.setMessage("Testing Lucene. :-)");
+	public void setUp() throws IOException {
+		// Creates three mock e-mail messages.
+		email1 = new EmailMessage();
+		email1.setFrom("alexandrelucchesi@gmail.com");
+		email1.setTo("rbonifacio123@gmail.com");
+		email1.setCc("jeremiasmg@gmail.com");
+		email1.setBcc("somebcc@gmail.com");
+		email1.setSubject("Some subject");
+		email1.setMessage("Testing Lucene. :-)");
 		Date date = null;
 		try {
 			date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2014-11-21 00:00:00");
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		childEmail1.setDate(date);
-		childEmail1.setFolder(new IrisFolder(19, "UnB"));
+		email1.setDate(date);
 		
-		childEmail2 = new EmailMessage();
-		childEmail2.setFrom("jeremiasmg@gmail.com");
-		childEmail2.setTo("alexandrelucchesi@gmail.com");
-		childEmail2.setCc("");
-		childEmail2.setBcc("");
-		childEmail2.setSubject("Deal with it");
-		childEmail2.setMessage("Just deal with it!");
+		email2 = new EmailMessage();
+		email2.setFrom("jeremiasmg@gmail.com");
+		email2.setTo("alexandrelucchesi@gmail.com");
+		email2.setCc("");
+		email2.setBcc("");
+		email2.setSubject("Deal with it");
+		email2.setMessage("Just deal with it!");
 		date = null;
 		try {
 			date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2014-12-25 06:30:21");
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		childEmail2.setDate(date);
-		childEmail2.setFolder(new IrisFolder(19, "UnB"));
+		email2.setDate(date);
+
 		
-		// Creates root folder and the two messages.
-		rootFolder = new IrisFolder();
-		rootFolder.setId(1);
-		rootFolder.setName("A");
-		rootFolder.addElement(childEmail1);
-		rootFolder.addElement(childEmail2);
+		email3 = new EmailMessage();
+		email3.setFrom("danielsandoval@gmail.com");
+		email3.setTo("pedrosalum@gmail.com");
+		email3.setCc("");
+		email3.setBcc("");
+		email3.setSubject("Loop Key");
+		email3.setMessage("Not only a door 'openner'...");
+		date = null;
+		try {
+			date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2014-11-24 06:05:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		email3.setDate(date);
+		
+		// Creates the inbox and outbox folders.
+		folder1 = new IrisFolder();
+		folder1.setName("FOLDER1");
+		folder1.addElement(email1);
+		folder1.addElement(email2);
+		
+		folder2 = new IrisFolder();
+		folder2.setName("FOLDER2");
+		folder2.addElement(email3);
 	}
-	
+		
 	@Test
 	public void testSave() throws IOException, DBException {
-		folderDAO.save(rootFolder);
+		folderDAO.save(folder1);
+		folderDAO.save(folder2);
+		assertNotNull(folder1.getId());
+		assertNotNull(folder2.getId());
 	}
 	
 	@Test
 	public void testFindByName() throws DBException {
-		folderDAO.save(rootFolder);
+		folderDAO.save(folder1);
 		
-		IrisFolder folder = folderDAO.findByName(rootFolder.getName());
+		IrisFolder folder = folderDAO.findByName(folder1.getName());
 		assertNotNull(folder);
-		assertEquals(folder.getName(), rootFolder.getName());
+		assertEquals(folder.getName(), folder1.getName());
+		assertEquals(folder.getId(), folder1.getId());
 		
 		List<FolderContent> contents = folder.getContents();
-		assertEquals(contents.size(), rootFolder.getContents().size());
+		assertEquals(contents.size(), folder1.getContents().size());
 		
-		List<Integer> contentIDs = new ArrayList<Integer>();
+		List<String> contentIDs = new ArrayList<String>();
 		for (FolderContent fc : contents) {
 			contentIDs.add(fc.getId());
 		}
 		
-		assertTrue(contentIDs.contains(childEmail1.getId()));
-		assertTrue(contentIDs.contains(childEmail2.getId()));
+		assertTrue(contentIDs.contains(email1.getId()));
+		assertTrue(contentIDs.contains(email2.getId()));
+	}
+	
+	@Test
+	public void testStandardFolders() throws DBException {
+		folderDAO.findByName("INBOX");
+		folderDAO.findByName("OUTBOX");
 	}
 	
 //	@Override

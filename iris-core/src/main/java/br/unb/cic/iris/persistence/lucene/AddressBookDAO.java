@@ -8,7 +8,6 @@ import java.util.UUID;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Store;
-import org.apache.lucene.document.LongField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
@@ -16,7 +15,6 @@ import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
@@ -44,11 +42,10 @@ public class AddressBookDAO extends LuceneDoc<AddressBookEntry> implements
 	public void save(AddressBookEntry entry) throws DBException {
 		try {			
 			if (entry.getId() == null) { // Create
-				throw new DBException("Can't create address book entry with no 'id'.", new Exception());
-				//create(entry);
-			} else {
+				create(entry);
+			} else { // Update (maybe)
 				Query typeQuery = new TermQuery(new Term("type", "addressBook"));
-				Query idQuery = NumericRangeQuery.newLongRange("id", entry.getId(), entry.getId(), true, true);
+				Query idQuery = new TermQuery(new Term("id", entry.getId()));
 				
 				// Checks whether an address book entry with the given 'id' exists in the index.
 				BooleanQuery q = new BooleanQuery();
@@ -58,12 +55,10 @@ public class AddressBookDAO extends LuceneDoc<AddressBookEntry> implements
 				IndexSearcher searcher = IndexManager.getSearcher();
 				TopDocs docs = searcher.search(q, 1);				
 
-				if (docs.totalHits > 0) { // Case doc already exists, updates it!
-					int docId = docs.scoreDocs[0].doc;
-					update(searcher.doc(docId), entry);
-				} else { // Otherwise, creates a new document.
-					create(entry);
-				}
+				if (docs.totalHits > 0) // Case doc exists, updates it!
+					update(entry);
+				else // Otherwise, throws an error!
+					throw new DBException("The specified entry does not exist.", new Exception());
 			}
 		} catch (DBException e) {
 			throw e;
@@ -74,29 +69,32 @@ public class AddressBookDAO extends LuceneDoc<AddressBookEntry> implements
 
 	private void create(AddressBookEntry entry) throws DBException {
 		try {
-			IndexWriter writer = IndexManager.getWriter();
-
-			StringField uuidField = new StringField("uuid", UUID.randomUUID().toString(), Store.YES);
 			Document newDoc = toLuceneDoc(entry);
-			newDoc.add(uuidField);
+			String id = UUID.randomUUID().toString();
+			newDoc.add(new StringField("id", id, Store.YES));
+			
+			IndexWriter writer = IndexManager.getWriter();
 			writer.addDocument(newDoc);
 			writer.commit();
+			
+			// Sets the new entry id.
+			entry.setId(id);
 		} catch (IOException e) {
 			throw new DBException("An error occured while creating address book entry.", e);
 		}
 	}
 	
-	private void update(Document oldDoc, AddressBookEntry entry) throws DBException {
+	private void update(AddressBookEntry entry) throws DBException {
 		try {
-			IndexWriter writer = IndexManager.getWriter();
-
-			String oldDocUUID = oldDoc.getField("uuid").stringValue();
-			// As it's an update operation, keep the previous UUID.
-			StringField uuidField = new StringField("uuid", oldDocUUID, Store.YES);
+			// As it's an update operation, keep the previous id.
 			// The update operation actually removes the old document and adds a new one.
-			Document newDoc = toLuceneDoc(entry);
-			newDoc.add(uuidField);
-			writer.updateDocument(new Term("uuid", oldDocUUID), newDoc);
+			Document doc = toLuceneDoc(entry);
+			doc.add(new StringField("id", entry.getId(), Store.YES));
+			
+			IndexWriter writer = IndexManager.getWriter();
+			// As 'id' is actually an UUID, simply passing the 'id' is enough to update the right
+			// document. It's not necessary to filter by type.
+			writer.updateDocument(new Term("id", entry.getId()), doc);
 			writer.commit();
 		} catch (IOException e) {
 			throw new DBException("An error occured while updating address book entry.", e);
@@ -107,9 +105,12 @@ public class AddressBookDAO extends LuceneDoc<AddressBookEntry> implements
 	public AddressBookEntry find(String nick) throws DBException {
 		AddressBookEntry entry = null;
 		try {
+			BooleanQuery q = new BooleanQuery();
+			q.add(new BooleanClause(new TermQuery(new Term("type", "addressBook")), Occur.MUST));
+			q.add(new BooleanClause(new TermQuery(new Term("nick", nick)), Occur.MUST));
+			
 			IndexSearcher searcher = IndexManager.getSearcher();
-			TopDocs docs = searcher.search(
-					new TermQuery(new Term("nick", nick)), 1);
+			TopDocs docs = searcher.search(q, 1);
 
 			if (docs.totalHits > 0) {
 				int docId = docs.scoreDocs[0].doc;
@@ -126,10 +127,8 @@ public class AddressBookDAO extends LuceneDoc<AddressBookEntry> implements
 	public void delete(String nick) throws DBException {
 		try {
 			BooleanQuery q = new BooleanQuery();
-			q.add(new BooleanClause(new TermQuery(new Term("type",
-					"addressBook")), Occur.MUST));
-			q.add(new BooleanClause(new TermQuery(new Term("nick", nick)),
-					Occur.MUST));
+			q.add(new BooleanClause(new TermQuery(new Term("type", "addressBook")), Occur.MUST));
+			q.add(new BooleanClause(new TermQuery(new Term("nick", nick)), Occur.MUST));
 
 			IndexWriter writer = IndexManager.getWriter();
 			writer.deleteDocuments(q);
@@ -143,7 +142,6 @@ public class AddressBookDAO extends LuceneDoc<AddressBookEntry> implements
 	public Document toLuceneDoc(AddressBookEntry m) {
 		List<Field> fields = new ArrayList<Field>();
 		fields.add(new StringField("type", "addressBook", Store.YES));
-		fields.add(new LongField("id", m.getId().longValue(), Store.YES));
 		fields.add(new StringField("nick", m.getNick(), Store.YES));
 		fields.add(new StringField("address", m.getAddress(), Store.YES));
 
@@ -157,7 +155,7 @@ public class AddressBookDAO extends LuceneDoc<AddressBookEntry> implements
 	@Override
 	protected AddressBookEntry fromLuceneDoc(Document doc) {
 		AddressBookEntry entry = new AddressBookEntry();
-		entry.setId(doc.getField("id").numericValue().longValue());
+		entry.setId(doc.getField("id").stringValue());
 		entry.setNick(doc.getField("nick").stringValue());
 		entry.setAddress(doc.getField("address").stringValue());
 		return entry;

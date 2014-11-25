@@ -17,9 +17,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-
 /**
  * A class that represents an email message.
  * 
@@ -50,7 +47,6 @@ public class EmailMessage extends FolderContent {
 	@Column(name="DATE")
 	private Date date;
 	
-	@Cascade({CascadeType.SAVE_UPDATE})
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "FOLDER_ID", nullable = false)
 	private IrisFolder folder;

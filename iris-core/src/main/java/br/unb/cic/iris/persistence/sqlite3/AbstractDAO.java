@@ -1,7 +1,11 @@
 package br.unb.cic.iris.persistence.sqlite3;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -20,13 +24,56 @@ public abstract class AbstractDAO<T> {
 		System.out.println("******************************** CLAZZ="+clazz);
 	}
 	
+	/**
+	 * Returns all the methods of a given class, including inherited ones.
+	 * 
+	 * @param methods
+	 * @param type
+	 * @return
+	 */
+	private static List<Method> getAllMethods(List<Method> methods, Class<?> type) {
+	    methods.addAll(Arrays.asList(type.getDeclaredMethods()));
+
+	    if (type.getSuperclass() != null)
+	        methods = getAllMethods(methods, type.getSuperclass());
+
+	    return methods;
+	}
+	
 	public void saveOrUpdate(T obj) throws DBException {
         try {
+        	List<Method> methods = getAllMethods(new ArrayList<Method>(), obj.getClass());
+        	
+        	Method getId = null;
+        	Method setId = null;
+        	
+        	for (Method m : methods) {
+        		if (m.getName().equals("getId"))
+        			getId = m;
+        		else if (m.getName().equals("setId"))
+        			setId = m;
+        		
+        		if (getId != null && setId != null)
+        			break;
+        	}
+        	
+        	if (getId == null || setId == null)
+        		throw new Exception();
+
+        	
+        	String id = (String) getId.invoke(obj, (Object []) null);
+        	
+        	if (id == null) // Create
+        		setId.invoke(obj, UUID.randomUUID().toString());
+        	// else... It should be treated as an update operation!
+        	
             startSession();
             session.saveOrUpdate(obj);
             session.getTransaction().commit();
         } catch (HibernateException e) {
         	handleException(e);
+        } catch (Exception e) {
+        	throw new DBException("Couldn't call `getId()` or `setId()` methods on entity.", e);
         } finally {
         	closeSession();
         }

@@ -2,6 +2,7 @@ package br.unb.cic.iris.core;
 
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,10 +36,14 @@ public class TestFolderDAO {
 				System.out.println("FOLDER: "+f.getName());
 			}
 			Assert.assertTrue(!all.isEmpty());
+			
+			//Clean up
+			dao.delete(folder);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 			Assert.fail("error while testing TestFolderDAO.save()");
 		}
 	}
+	
 }

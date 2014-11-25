@@ -7,6 +7,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
+import br.unb.cic.iris.core.exception.DBException;
+import br.unb.cic.iris.core.model.IrisFolder;
+import br.unb.cic.iris.persistence.IFolderDAO;
+
 public abstract class TestLucene {
 	
 	// When set to 'true', creates the index in the filesystem in the path specified by 'DEFAULT_IDX_DIR'.
@@ -30,11 +34,16 @@ public abstract class TestLucene {
 	}
 	
 	@Before
-	public void setUpIndex() throws IOException {
-		if (FS_IDX)		
+	public void setUpIndex() throws IOException, DBException {
+		if (FS_IDX)
 			IndexManager.createIndex(DEFAULT_IDX_DIR);
 		else
 			IndexManager.createIndex(null);
+		
+		// Adds standard folders.
+		IFolderDAO folderDAO = FolderDAO.instance();
+		folderDAO.save(new IrisFolder("INBOX"));
+		folderDAO.save(new IrisFolder("OUTBOX"));
 	}
 	
 	
