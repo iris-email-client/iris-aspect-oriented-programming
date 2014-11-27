@@ -1,0 +1,34 @@
+<configurationModel>
+    <configuration>
+        <expression>iris</expression>
+        <transformation>
+            <name>selectAllComponents</name>
+	    <args>-</args>
+        </transformation>
+        <transformation>
+          <name>createPropertyFile</name>
+          <args>persistenceProperties</args>
+        </transformation>
+    </configuration>
+    <configuration>
+      <expression>Not(addressBook)</expression>
+      <transformation>
+            <name>removeComponents</name>
+	    <args>addressBookAspect, addressBookFacade, addressBookCommand</args>
+        </transformation>
+    </configuration>
+    <configuration>
+    <expression>relational</expression>
+       <transformation>
+          <name>setPropertyInFile</name>
+          <args>persistenceProperties,factory,br.unb.cic.iris.persistence.sqlite3.SQLiteDAOFactory</args>
+        </transformation>
+    </configuration>
+    <configuration>
+     <expression>nonRelational</expression>
+       <transformation>
+          <name>setPropertyInFile</name>
+          <args>persistenceProperties,factory,br.unb.cic.iris.persistence.lucene.LuceneDAOFactory</args>
+        </transformation>
+    </configuration>
+</configurationModel>

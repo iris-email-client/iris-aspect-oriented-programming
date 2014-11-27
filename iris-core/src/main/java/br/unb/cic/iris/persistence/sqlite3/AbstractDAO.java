@@ -91,7 +91,7 @@ public abstract class AbstractDAO<T> {
         }
 	}
 	
-	public T findById(Long id) throws DBException {
+	public T findById(String id) throws DBException {
         T obj = null;
         try {
             startSession();

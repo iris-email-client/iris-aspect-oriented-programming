@@ -1,6 +1,7 @@
 package br.unb.cic.iris.persistence.lucene;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.lucene.document.Document;
@@ -218,6 +219,11 @@ public class FolderDAO implements IFolderDAO {
 		folder.setId(doc.getField("id").stringValue());
 		folder.setName(doc.getField("name").stringValue());
 		return folder;
+	}
+
+	@Override
+	public List<IrisFolder> findAll() throws DBException {
+		throw new RuntimeException("not implemented yet");
 	}
 
 

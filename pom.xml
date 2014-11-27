@@ -11,7 +11,7 @@
 	<url>https://github.com/iris-email-client/iris-base/tree/iris-base-j7</url>
 	<properties>
 		<skipTests>false</skipTests>
-		<compiler.version>1.8</compiler.version>
+		<compiler.version>1.7</compiler.version>
 		<iris.encoding>UTF-8</iris.encoding>
 		<project.build.sourceEncoding>${iris.encoding}</project.build.sourceEncoding>
 		<aspectj.version>1.8.3</aspectj.version> <!-- 1.7.2.RELEASE -->
@@ -150,8 +150,8 @@
 					<version>3.2</version>
 					<configuration>
 						<encoding>${iris.encoding}</encoding>
-						<source>${compiler.version}</source>
-						<target>${compiler.version}</target>
+						<source>1.7</source>
+						<target>1.7</target>
 						<optimize>true</optimize>
 						<showDeprecation>false</showDeprecation>
 						<showWarnings>false</showWarnings>

@@ -181,4 +181,9 @@ public class EmailDAO extends LuceneDoc<EmailMessage> implements IEmailDAO {
 		throw new RuntimeException("not implemented yet");
 	}
 
+	@Override
+	public EmailMessage findById(String uuid) throws DBException {
+		throw new RuntimeException("not implemented yet");
+	}
+
 }

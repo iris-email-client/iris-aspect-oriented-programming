@@ -67,4 +67,5 @@ public final class EmailDAO extends AbstractDAO<EmailMessage> implements IEmailD
 		return null;
 	}
 
+
 }

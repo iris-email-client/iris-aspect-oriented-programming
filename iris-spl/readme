@@ -1,0 +1,18 @@
+List of products in this directory
+
+instance-model01
+ - iris
+ - services(sendMessage, receiveMessage)
+ - persistence(relational)
+
+instance-model02
+ - iris
+ - services(sendMessage, receiveMessage)
+ - addressBook
+ - persistence(relational)
+
+instance-model03
+ - iris
+ - services(sendMessage, receiveMessage)
+ - persistnce(nonRelational)
+ 

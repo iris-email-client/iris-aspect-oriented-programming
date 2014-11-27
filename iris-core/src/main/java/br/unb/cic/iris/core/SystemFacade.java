@@ -14,6 +14,7 @@ import javax.mail.search.FlagTerm;
 import javax.mail.search.ReceivedDateTerm;
 import javax.mail.search.SearchTerm;
 
+import br.unb.cic.iris.core.exception.DBException;
 import br.unb.cic.iris.core.exception.EmailException;
 import br.unb.cic.iris.core.exception.EmailUncheckedException;
 import br.unb.cic.iris.core.model.EmailMessage;
@@ -152,7 +153,7 @@ public final class SystemFacade {
 		 */
 	}
 	
-	public List<EmailMessage> listInboxMessages() {
+	public List<EmailMessage> listInboxMessages() throws DBException {
 		return daoFactory.createEmailDAO().findByFolder(IrisFolder.INBOX);
 	}
 	
