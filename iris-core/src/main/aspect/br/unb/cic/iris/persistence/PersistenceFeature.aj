@@ -8,13 +8,30 @@ import br.unb.cic.iris.persistence.sqlite3.SQLiteDAOFactory;
 
 /**
  * This aspect is responsible for setting the proper persistence 
- * factory into the system facade. 
+ * factory into the system facade (actually, in all manager 
+ * classes that depends on a DAOFactory). 
  *  
  * @author rbonifacio
  */
 public privileged aspect PersistenceFeature {
 
-	after(br.unb.cic.iris.core.SystemFacade facade) : initialization(br.unb.cic.iris.core.SystemFacade.new(..)) && 	this(facade) {
+	//----------------------------------------------------
+	//That's is a nice pointcut.
+	//It intercepts the execution of getDaoFactory method, 
+	//within any subclass of Manager.
+	//----------------------------------------------------
+	
+	pointcut injectDaoFactory() : execution (DAOFactory br.unb.cic.iris.core.Manager+.getDaoFactory()); 
+
+	//In a first moment, I was wondering that using AOP for injecting 
+	//the DAOFactory implementation would be a *napalm bomb* to kill a 
+	//single, inofencive ant. However, after I have implemented (or copied) 
+	//FolderManager (from delta implementation), I realized how AOP is 
+	//useful in this context. We have quantification now, which would be 
+	//a little difficult to implement using OOP--- at least without a framework 
+	//like spring. Ok, but spring uses AOP internally. 
+	Object around() : injectDaoFactory() {
+		System.out.println(thisJoinPoint.getTarget());
 		String fileName = "persistence.properties";
 		try {
 			Logger.getLogger(PersistenceFeature.class.getName()).info("Load properties" + fileName);
@@ -23,12 +40,12 @@ public privileged aspect PersistenceFeature {
 			String name = properties.getProperty("factory");
 			if(name != null) {
 				Class factory = Class.forName(name);
-				facade.daoFactory = ((DAOFactory)factory.newInstance());
+				return ((DAOFactory)factory.newInstance());
 			}
 		}
 		catch(Exception e) {
 			Logger.getLogger(PersistenceFeature.class.getName()).warning("Using default DAOFactory");			
-			facade.daoFactory = new SQLiteDAOFactory();
-		}	
+		}
+		return new SQLiteDAOFactory();
 	}
 }

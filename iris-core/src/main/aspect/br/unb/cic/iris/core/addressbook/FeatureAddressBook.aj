@@ -34,22 +34,21 @@ public privileged aspect FeatureAddressBook {
 	 * (String, String) throws EmailException
 	 */
 	public void br.unb.cic.iris.core.SystemFacade.addAddressBookEntry(String name, String email) throws EmailException {
-		System.out.println("saving ab from AOP");
-		IAddressBookDAO dao = daoFactory.createAddressBookDAO();
+		IAddressBookDAO dao = getDaoFactory().createAddressBookDAO();
 		dao.save(new AddressBookEntry(name, email));
 	}
 	
 	public void br.unb.cic.iris.core.SystemFacade.deleteAddressBookEntry(String name) throws EmailException {
-		IAddressBookDAO dao = daoFactory.createAddressBookDAO();
+		IAddressBookDAO dao = getDaoFactory().createAddressBookDAO();
 		dao.delete(name);
 	}
 
 	public AddressBookEntry br.unb.cic.iris.core.SystemFacade.find(String name) throws EmailException {
-		IAddressBookDAO dao = daoFactory.createAddressBookDAO();
+		IAddressBookDAO dao = getDaoFactory().createAddressBookDAO();
 		return dao.find(name);
 	}
 	public List<AddressBookEntry> br.unb.cic.iris.core.SystemFacade.listAddressBook() throws EmailException {
-		return daoFactory.createAddressBookDAO().findAll();
+		return getDaoFactory().createAddressBookDAO().findAll();
 	}
 	
 	
@@ -57,7 +56,6 @@ public privileged aspect FeatureAddressBook {
 	pointcut sendMessage(EmailMessage message) : execution(void br.unb.cic.iris.mail.EmailClient.send(EmailMessage)) && args(message);
 	
 	Object around(EmailMessage message) throws EmailException : sendMessage(message) {
-		System.out.println("Enviando mensagem por AOP");
 		message.setTo(findAddress(message.getTo()));
 		message.setCc(findAddress(message.getCc()));
 		message.setBcc(findAddress(message.getBcc()));

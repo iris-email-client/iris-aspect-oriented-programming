@@ -67,7 +67,7 @@ public abstract class AbstractDAO<T> {
         		setId.invoke(obj, UUID.randomUUID().toString());
         	// else... It should be treated as an update operation!
         	
-            startSession();
+            startSession(true);
             session.saveOrUpdate(obj);
             session.getTransaction().commit();
         } catch (HibernateException e) {
@@ -81,7 +81,7 @@ public abstract class AbstractDAO<T> {
 	
 	public void delete(T t) throws DBException {
 		try {
-            startSession();
+            startSession(true);
             session.delete(t);
             session.getTransaction().commit();
         } catch (HibernateException e) {
@@ -94,9 +94,10 @@ public abstract class AbstractDAO<T> {
 	public T findById(String id) throws DBException {
         T obj = null;
         try {
-            startSession();
-            obj = (T) session.load(clazz, id);
-            session.getTransaction().commit();
+            startSession(false);
+            obj = (T) session.load(clazz, id); //TODO: we have to discuss this. Hibernate is really annoying. 
+            obj.toString();
+            //session.getTransaction().commit();
         } catch (HibernateException e) {
             handleException(e);
         } finally {
@@ -108,10 +109,10 @@ public abstract class AbstractDAO<T> {
     public List<T> findAll() throws DBException {
         List<T> objects = null;
         try {
-            startSession();
+            startSession(false);
             Query query = session.createQuery("from " + clazz.getName());
             objects = query.list();
-            session.getTransaction().commit();
+            //session.getTransaction().commit();
         } catch (HibernateException e) {
             handleException(e);
         } finally {
@@ -135,13 +136,18 @@ public abstract class AbstractDAO<T> {
 	}
 	
 	protected void handleException(Exception e) throws DBException {
-		session.getTransaction().rollback();
+		if(session.getTransaction().isActive()) {
+			session.getTransaction().rollback();
+		}
         throw new DBException(e.getMessage(), e);
     }
 
-    protected void startSession() throws HibernateException {
+    protected void startSession(boolean beginTransaction) throws HibernateException {
         session = HibernateUtil.getSessionFactory().openSession();
-        session.beginTransaction();
+        
+        if(beginTransaction) {
+        	session.beginTransaction();
+        }
     }
     
 	protected void closeSession() {

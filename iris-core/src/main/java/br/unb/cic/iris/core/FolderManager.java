@@ -5,9 +5,8 @@ import java.util.List;
 import br.unb.cic.iris.core.exception.EmailException;
 import br.unb.cic.iris.core.model.EmailMessage;
 import br.unb.cic.iris.core.model.IrisFolder;
-import br.unb.cic.iris.persistence.DAOFactory;
 
-public final class FolderManager {
+public final class FolderManager extends Manager {
 
 	private static final FolderManager instance = new FolderManager();
 	private static final String ROOT_FOLDER = "ROOT";
@@ -17,8 +16,6 @@ public final class FolderManager {
 
 	private int pageNumber = 0;
 	private int pageSize = 10;
-
-	private DAOFactory daoFactory;
 
 	private FolderManager() { }
 
@@ -38,16 +35,20 @@ public final class FolderManager {
 		changeToFolder(folderId+"");
 	}
 	
-	public void changeToFolder(String folderId) throws EmailException {
-		IrisFolder folder = daoFactory.createFolderDAO().findById(folderId);
+	public IrisFolder changeToFolder(String folderId) throws EmailException {
+		IrisFolder folder = getDaoFactory().createFolderDAO().findById(folderId);
 		if(folder != null) {
 			currentFolder = folder;
 			currentMessages = new java.util.ArrayList<EmailMessage>();
 		}
+		else {
+			System.out.println("not found");
+		}
+		return folder;
 	}
 	
 	public List<IrisFolder> listFolders() throws EmailException {
-		return daoFactory.createFolderDAO().findAll();
+		return getDaoFactory().createFolderDAO().findAll();
 	}
 	
 	public List<EmailMessage> listFolderMessages() throws EmailException {
@@ -56,8 +57,8 @@ public final class FolderManager {
 		}
 		//return EmailDAO.instance().listMessages(currentFolder.getId());
 		//TODO ver como ficara a paginacao
-		currentMessages = daoFactory.createEmailDAO().findByFolder(currentFolder.getId());
-		return currentMessages.subList(pageSize * pageNumber, (pageSize * (pageNumber + 1)) - 1);
+		currentMessages = getDaoFactory().createEmailDAO().findByFolder(currentFolder.getId());
+		return currentMessages; //currentMessages.subList(pageSize * pageNumber, (pageSize * (pageNumber + 1)) - 1);
 	}
 	
 	public List<EmailMessage> next() throws EmailException {
@@ -75,6 +76,7 @@ public final class FolderManager {
 	}
 	
 	public EmailMessage getMessage(String id) throws EmailException {
-		return daoFactory.createEmailDAO().findById(id);
+		return getDaoFactory().createEmailDAO().findById(id);
 	}
+	
 }
