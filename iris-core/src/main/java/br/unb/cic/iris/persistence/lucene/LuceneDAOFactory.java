@@ -30,10 +30,11 @@ public class LuceneDAOFactory implements DAOFactory {
 					
 					// Creates the standard folders in the index
 					IFolderDAO folderDAO = createFolderDAO();
-					folderDAO.save(new IrisFolder("INBOX"));
-					folderDAO.save(new IrisFolder("OUTBOX"));
+					folderDAO.saveOrUpdate(new IrisFolder("INBOX"));
+					folderDAO.saveOrUpdate(new IrisFolder("OUTBOX"));
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 				System.exit(0);
 			}
 		}

@@ -9,12 +9,16 @@
           <name>createPropertyFile</name>
           <args>persistenceProperties</args>
         </transformation>
+	<transformation>
+          <name>createPropertyFile</name>
+          <args>persistencePropertiesTest</args>
+        </transformation>
     </configuration>
     <configuration>
       <expression>Not(addressBook)</expression>
-      <transformation>
+       <transformation>
             <name>removeComponents</name>
-	    <args>addressBookAspect, addressBookFacade, addressBookCommand</args>
+	    <args>addressBookAspect, addressBookFacade, addressBookModel, addressBookCommand, addressBookTest, addressBookDAOTest</args>
         </transformation>
     </configuration>
     <configuration>
@@ -23,12 +27,28 @@
           <name>setPropertyInFile</name>
           <args>persistenceProperties,factory,br.unb.cic.iris.persistence.sqlite3.SQLiteDAOFactory</args>
         </transformation>
+        <transformation>
+          <name>setPropertyInFile</name>
+          <args>persistencePropertiesTest,factory,br.unb.cic.iris.persistence.sqlite3.SQLiteDAOFactory</args>
+        </transformation>
+	<transformation>
+            <name>removeComponents</name>
+	    <args>luceneCode,luceneTest</args>
+        </transformation>
     </configuration>
     <configuration>
      <expression>nonRelational</expression>
        <transformation>
           <name>setPropertyInFile</name>
           <args>persistenceProperties,factory,br.unb.cic.iris.persistence.lucene.LuceneDAOFactory</args>
+        </transformation>
+	<transformation>
+          <name>setPropertyInFile</name>
+          <args>persistencePropertiesTest,factory,br.unb.cic.iris.persistence.lucene.LuceneDAOFactory</args>
+        </transformation>
+       <transformation>
+            <name>removeComponents</name>
+	    <args>sqliteCode, sqliteTest</args>
         </transformation>
     </configuration>
 </configurationModel>

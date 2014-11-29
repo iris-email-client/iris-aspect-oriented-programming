@@ -42,8 +42,8 @@ public abstract class TestLucene {
 		
 		// Adds standard folders.
 		IFolderDAO folderDAO = FolderDAO.instance();
-		folderDAO.save(new IrisFolder("INBOX"));
-		folderDAO.save(new IrisFolder("OUTBOX"));
+		folderDAO.saveOrUpdate(new IrisFolder("INBOX"));
+		folderDAO.saveOrUpdate(new IrisFolder("OUTBOX"));
 	}
 	
 	

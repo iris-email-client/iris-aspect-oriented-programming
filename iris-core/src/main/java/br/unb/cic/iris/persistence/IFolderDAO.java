@@ -8,7 +8,7 @@ import br.unb.cic.iris.core.model.IrisFolder;
 public interface IFolderDAO {
 	public IrisFolder findById(String uuid) throws DBException; 
 	
-	public void save(IrisFolder folder) throws DBException;
+	public void saveOrUpdate(IrisFolder folder) throws DBException;
 	
 	public IrisFolder findByName(String folderName) throws DBException;
 	

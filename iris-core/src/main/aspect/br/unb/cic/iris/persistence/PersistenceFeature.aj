@@ -1,10 +1,9 @@
 package br.unb.cic.iris.persistence;
 
-import java.io.FileInputStream;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import br.unb.cic.iris.persistence.sqlite3.SQLiteDAOFactory;
+//import br.unb.cic.iris.persistence.sqlite3.SQLiteDAOFactory;
 
 /**
  * This aspect is responsible for setting the proper persistence 
@@ -38,14 +37,21 @@ public privileged aspect PersistenceFeature {
 			Properties properties = new Properties();
 			properties.load(getClass().getResourceAsStream("/" + fileName));
 			String name = properties.getProperty("factory");
+			Logger.getLogger(PersistenceFeature.class.getName()).info("working with factory: " + name);
 			if(name != null) {
 				Class factory = Class.forName(name);
-				return ((DAOFactory)factory.newInstance());
+				return factory.getMethod("instance").invoke(null);
+				//return ((DAOFactory)factory.newInstance());
+			}
+			else {
+				Logger.getLogger(PersistenceFeature.class.getName()).severe("Could not instantiate DAOFactory. Factory name is null");			
+				throw new RuntimeException();
 			}
 		}
 		catch(Exception e) {
-			Logger.getLogger(PersistenceFeature.class.getName()).warning("Using default DAOFactory");			
+			Logger.getLogger(PersistenceFeature.class.getName()).severe("Could not instantiate DAOFactory");
+			e.printStackTrace();
+			throw new RuntimeException();
 		}
-		return new SQLiteDAOFactory();
 	}
 }

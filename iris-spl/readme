@@ -4,6 +4,7 @@ instance-model01
  - iris
  - services(sendMessage, receiveMessage)
  - persistence(relational)
+ - addressBook
 
 instance-model02
  - iris

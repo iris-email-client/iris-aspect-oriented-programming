@@ -1,7 +1,0 @@
-iris
-services
-sendMessage
-receiveMessage
-addressBook
-persistence
-relational

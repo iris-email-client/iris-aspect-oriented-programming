@@ -139,7 +139,7 @@ public class FolderDAO implements IFolderDAO {
 	// IMPORTANT: This method will need to be updated to support multiple folders. Probably, there'll be a property 
 	// `IrisFolder parent` in the `IrisFolder` class, so that a folder object knows its parent.
 	@Override
-	public void save(IrisFolder folder) throws DBException {
+	public void saveOrUpdate(IrisFolder folder) throws DBException {
 		try {			
 			if (folder.getId() == null) { // Create
 				create(null, folder);

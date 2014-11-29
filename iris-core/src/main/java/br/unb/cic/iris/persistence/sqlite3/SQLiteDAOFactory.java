@@ -7,6 +7,17 @@ import br.unb.cic.iris.persistence.IFolderDAO;
 
 public class SQLiteDAOFactory implements DAOFactory {
 
+	private static SQLiteDAOFactory instance;
+	
+	private SQLiteDAOFactory() { }
+	
+	public static SQLiteDAOFactory instance() {
+		if(instance == null) {
+			instance = new SQLiteDAOFactory();
+		}
+		return instance;
+	}
+	
 	public IAddressBookDAO createAddressBookDAO() {
 		return AddressBookDAO.instance();
 	}
