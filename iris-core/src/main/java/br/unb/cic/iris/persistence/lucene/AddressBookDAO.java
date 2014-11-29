@@ -21,11 +21,12 @@ import org.apache.lucene.search.TopDocs;
 
 import br.unb.cic.iris.core.exception.DBException;
 import br.unb.cic.iris.core.model.AddressBookEntry;
+import br.unb.cic.iris.core.model.IrisFolder;
 import br.unb.cic.iris.persistence.IAddressBookDAO;
 
-public class AddressBookDAO extends LuceneDoc<AddressBookEntry> implements
-		IAddressBookDAO {
+public class AddressBookDAO extends LuceneDoc<AddressBookEntry> implements IAddressBookDAO {
 
+	private static final int MAX_NUMBER_OF_ENTRIES = 1000;
 	private static AddressBookDAO instance;
 
 	private AddressBookDAO() {
@@ -162,7 +163,25 @@ public class AddressBookDAO extends LuceneDoc<AddressBookEntry> implements
 	}
 
 	public List<AddressBookEntry> findAll() throws DBException {
-		throw new RuntimeException("not implemented yet");
+		List<AddressBookEntry> entries = new ArrayList<AddressBookEntry>();
+		try {
+			Query typeQuery = new TermQuery(new Term("type", "irisFolder"));
+		
+			// Checks whether a folder with the given 'name' exists in the index.
+			BooleanQuery q = new BooleanQuery();
+			q.add(new BooleanClause(typeQuery, Occur.MUST));
+		
+			IndexSearcher searcher = IndexManager.getSearcher();
+			TopDocs docs = searcher.search(q, MAX_NUMBER_OF_ENTRIES );
+			
+			if (docs.totalHits > 0) {
+				int docId = docs.scoreDocs[0].doc;
+				entries.add(fromLuceneDoc(searcher.doc(docId)));
+			}
+		}catch(Exception e) {
+			throw new DBException("could not list folders", e);
+		}
+		return entries;
 	}
 
 }

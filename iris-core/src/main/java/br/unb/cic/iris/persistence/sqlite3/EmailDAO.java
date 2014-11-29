@@ -12,10 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.hibernate.HibernateException;
-
 import br.unb.cic.iris.core.exception.DBException;
-import br.unb.cic.iris.core.model.AddressBookEntry;
 import br.unb.cic.iris.core.model.EmailMessage;
 import br.unb.cic.iris.persistence.IEmailDAO;
 

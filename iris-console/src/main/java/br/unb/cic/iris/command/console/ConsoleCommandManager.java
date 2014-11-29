@@ -2,6 +2,9 @@ package br.unb.cic.iris.command.console;
 
 import static br.unb.cic.iris.i18n.Message.message;
 import static br.unb.cic.iris.util.StringUtil.notEmpty;
+
+import java.util.logging.Logger;
+
 import br.unb.cic.iris.command.MailCommand;
 import br.unb.cic.iris.command.manager.AbstractCommandManager;
 import br.unb.cic.iris.core.exception.EmailException;
@@ -36,10 +39,10 @@ public class ConsoleCommandManager extends AbstractCommandManager {
 				}
 			} catch (EmailException ex) {
 				System.err.printf("%s: %s", message("error"), ex.getMessage());
-			} catch (Exception e) {
-				e.printStackTrace();
 			} catch (Throwable t){
-				t.printStackTrace();
+				Logger.getLogger(ConsoleCommandManager.class.getName()).severe("Error processing " + cmd);
+				Logger.getLogger(ConsoleCommandManager.class.getName()).severe(t.getMessage());
+				System.out.println();
 			}
 		}
 	}

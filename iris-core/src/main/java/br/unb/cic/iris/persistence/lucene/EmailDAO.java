@@ -177,13 +177,34 @@ public class EmailDAO extends LuceneDoc<EmailMessage> implements IEmailDAO {
 	}
 	
 	@Override
-	public List<EmailMessage> findByFolder(String inbox) {
+	public List<EmailMessage> findByFolder(String folderId) {
 		throw new RuntimeException("not implemented yet");
 	}
 
 	@Override
 	public EmailMessage findById(String uuid) throws DBException {
-		throw new RuntimeException("not implemented yet");
+		EmailMessage message = null;
+		try {
+			Query typeQuery = new TermQuery(new Term("type", "email"));
+			Query idQuery = new TermQuery(new Term("id", uuid));
+
+			// Checks whether a folder with the given 'name' exists in the index.
+			BooleanQuery q = new BooleanQuery();
+			q.add(new BooleanClause(typeQuery, Occur.MUST));
+			q.add(new BooleanClause(idQuery, Occur.MUST));
+
+			IndexSearcher searcher = IndexManager.getSearcher();
+			TopDocs docs = searcher.search(q, 1);
+
+			if (docs.totalHits > 0) {
+				int docId = docs.scoreDocs[0].doc;
+				message = this.fromLuceneDoc(searcher.doc(docId));
+			}
+
+		} catch (Exception e) {
+			throw new DBException("message '" + uuid + "' not found.", e);
+		}
+		return message;
 	}
 
 }

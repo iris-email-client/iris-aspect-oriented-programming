@@ -1,6 +1,7 @@
 package br.unb.cic.iris.persistence.lucene;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,6 +26,8 @@ import br.unb.cic.iris.persistence.IFolderDAO;
 
 public class FolderDAO implements IFolderDAO {
 
+	private static int MAX_NUMBER_OF_FOLDERS = 10;
+	
 	private static FolderDAO instance;
 	
 	private FolderDAO() {}
@@ -223,7 +226,25 @@ public class FolderDAO implements IFolderDAO {
 
 	@Override
 	public List<IrisFolder> findAll() throws DBException {
-		throw new RuntimeException("not implemented yet");
+		List<IrisFolder> folders = new ArrayList<IrisFolder>();
+		try {
+			Query typeQuery = new TermQuery(new Term("type", "irisFolder"));
+		
+			// Checks whether a folder with the given 'name' exists in the index.
+			BooleanQuery q = new BooleanQuery();
+			q.add(new BooleanClause(typeQuery, Occur.MUST));
+		
+			IndexSearcher searcher = IndexManager.getSearcher();
+			TopDocs docs = searcher.search(q, MAX_NUMBER_OF_FOLDERS);
+			
+			if (docs.totalHits > 0) {
+				int docId = docs.scoreDocs[0].doc;
+				folders.add(fromLuceneDoc(searcher.doc(docId)));
+			}
+		}catch(Exception e) {
+			throw new DBException("could not list folders", e);
+		}
+		return folders;
 	}
 
 
