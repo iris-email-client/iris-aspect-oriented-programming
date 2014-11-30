@@ -16,12 +16,12 @@ import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 
 import br.unb.cic.iris.core.exception.DBException;
 import br.unb.cic.iris.core.model.AddressBookEntry;
-import br.unb.cic.iris.core.model.IrisFolder;
 import br.unb.cic.iris.persistence.IAddressBookDAO;
 
 public class AddressBookDAO extends LuceneDoc<AddressBookEntry> implements IAddressBookDAO {
@@ -173,10 +173,8 @@ public class AddressBookDAO extends LuceneDoc<AddressBookEntry> implements IAddr
 		
 			IndexSearcher searcher = IndexManager.getSearcher();
 			TopDocs docs = searcher.search(q, MAX_NUMBER_OF_ENTRIES );
-			
-			if (docs.totalHits > 0) {
-				int docId = docs.scoreDocs[0].doc;
-				entries.add(fromLuceneDoc(searcher.doc(docId)));
+			for(ScoreDoc sc : docs.scoreDocs) {
+				entries.add(fromLuceneDoc(searcher.doc(sc.doc)));
 			}
 		}catch(Exception e) {
 			throw new DBException("could not list folders", e);

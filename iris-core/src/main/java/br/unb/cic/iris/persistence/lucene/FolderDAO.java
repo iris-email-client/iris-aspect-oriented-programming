@@ -237,10 +237,10 @@ public class FolderDAO implements IFolderDAO {
 			IndexSearcher searcher = IndexManager.getSearcher();
 			TopDocs docs = searcher.search(q, MAX_NUMBER_OF_FOLDERS);
 			
-			if (docs.totalHits > 0) {
-				int docId = docs.scoreDocs[0].doc;
-				folders.add(fromLuceneDoc(searcher.doc(docId)));
+			for(ScoreDoc sc : docs.scoreDocs) {
+				folders.add(fromLuceneDoc(searcher.doc(sc.doc)));
 			}
+			
 		}catch(Exception e) {
 			throw new DBException("could not list folders", e);
 		}
