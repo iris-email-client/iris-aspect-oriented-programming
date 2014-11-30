@@ -32,6 +32,8 @@ public interface IEmailDAO {
 	
 	public Date lastMessageReceived() throws DBException;
 	
-	public List<EmailMessage> findByFolder(String inbox);
+	public List<EmailMessage> findByFolder(String inbox) throws DBException;
+	
+	public EmailMessage findById(String uuid) throws DBException;
 
 }

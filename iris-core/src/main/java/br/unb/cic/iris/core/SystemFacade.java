@@ -14,6 +14,7 @@ import javax.mail.search.FlagTerm;
 import javax.mail.search.ReceivedDateTerm;
 import javax.mail.search.SearchTerm;
 
+import br.unb.cic.iris.core.exception.DBException;
 import br.unb.cic.iris.core.exception.EmailException;
 import br.unb.cic.iris.core.exception.EmailUncheckedException;
 import br.unb.cic.iris.core.model.EmailMessage;
@@ -24,10 +25,9 @@ import br.unb.cic.iris.mail.EmailProvider;
 import br.unb.cic.iris.mail.IEmailClient;
 import br.unb.cic.iris.mail.provider.DefaultProvider;
 import br.unb.cic.iris.mail.provider.ProviderManager;
-import br.unb.cic.iris.persistence.DAOFactory;
 import br.unb.cic.iris.persistence.IEmailDAO;
 
-public final class SystemFacade {
+public final class SystemFacade extends Manager {
 	private static final SystemFacade instance = new SystemFacade();
 
 	private IEmailClient client;
@@ -35,8 +35,7 @@ public final class SystemFacade {
 
 	private Status status = NOT_CONNECTED;
 	
-	private DAOFactory daoFactory;
-
+	
 	private SystemFacade() {
 		// load config file
 		Configuration config = new Configuration();
@@ -63,8 +62,8 @@ public final class SystemFacade {
 		verifyConnection();
 		client.send(message);
 		
-		IEmailDAO dao = daoFactory.createEmailDAO();
-		IrisFolder folderOutbox = daoFactory.createFolderDAO().findByName(IrisFolder.OUTBOX);
+		IEmailDAO dao = getDaoFactory().createEmailDAO();
+		IrisFolder folderOutbox = getDaoFactory().createFolderDAO().findByName(IrisFolder.OUTBOX);
 		message.setFolder(folderOutbox);
 		dao.saveMessage(message);
 	}
@@ -78,7 +77,7 @@ public final class SystemFacade {
 		verifyConnection();
 		
 		SearchTerm searchTerm = null;
-		IEmailDAO dao = daoFactory.createEmailDAO();
+		IEmailDAO dao = getDaoFactory().createEmailDAO();
 		
 		Date lastMessageReceived = dao.lastMessageReceived();
 		if(lastMessageReceived != null){
@@ -92,7 +91,7 @@ public final class SystemFacade {
 		try{
 		//persist messages
 		for(EmailMessage message: messages) {
-		IrisFolder folderEntity = daoFactory.createFolderDAO().findByName(folder);
+		IrisFolder folderEntity = getDaoFactory().createFolderDAO().findByName(folder);
 			if (folderEntity == null) {
 				folderEntity = new IrisFolder(folder);
 			}
@@ -152,12 +151,7 @@ public final class SystemFacade {
 		 */
 	}
 	
-	public List<EmailMessage> listInboxMessages() {
-		return daoFactory.createEmailDAO().findByFolder(IrisFolder.INBOX);
+	public List<EmailMessage> listInboxMessages() throws DBException {
+		return getDaoFactory().createEmailDAO().findByFolder(IrisFolder.INBOX);
 	}
-	
-	public DAOFactory getDaoFactory() {
-		return daoFactory;
-	}
-
 }

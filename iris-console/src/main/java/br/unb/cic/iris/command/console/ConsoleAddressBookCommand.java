@@ -9,9 +9,8 @@ import br.unb.cic.iris.core.exception.EmailException;
 import br.unb.cic.iris.core.exception.EmailUncheckedException;
 import br.unb.cic.iris.core.model.AddressBookEntry;
 import br.unb.cic.iris.util.EmailValidator;
-import br.unb.cic.iris.util.StringUtil;
 
-public class AddressBookConsoleCommand extends AbstractMailCommand {
+public class ConsoleAddressBookCommand extends AbstractMailCommand {
 
 	@Override
 	public void explain() {

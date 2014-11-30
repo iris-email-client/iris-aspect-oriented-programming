@@ -1,0 +1,13 @@
+addressBookCommand => iris-console/src/main/java/br/unb/cic/iris/command/console/AddressBookConsoleCommand.java;
+addressBookFacade => iris-core/src/main/aspect/br/unb/cic/iris/core/addressbook/AddressBookFacade.java;
+addressBookAspect => iris-core/src/main/aspect/br/unb/cic/iris/core/addressbook/FeatureAddressBook.aj; 
+addressBookModel => iris-core/src/main/br/unb/cic/iris/core/model/AddressBookEntry.java;
+addressBookTest => iris-core/src/test/java/br/unb/cic/iris/core/TestAddressBook.java;
+addressBookDAOTest => iris-core/src/test/java/br/unb/cic/iris/core/TestAddressBookDAO.java;
+persistenceProperties => iris-core/src/main/resources/persistence.properties;
+persistencePropertiesTest => iris-core/src/test/resources/persistence.properties;
+luceneCode => iris-core/src/main/java/br/unb/cic/iris/persistence/lucene;
+luceneTest => iris-core/src/test/java/br/unb/cic/iris/persistence/lucene;
+sqliteCode => iris-core/src/main/java/br/unb/cic/iris/persistence/sqlite3;
+sqliteTest => iris-core/src/test/java/br/unb/cic/iris/persistence/sqlite3;
+

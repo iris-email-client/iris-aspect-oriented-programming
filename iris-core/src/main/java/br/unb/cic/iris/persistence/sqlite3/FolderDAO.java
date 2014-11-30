@@ -21,7 +21,7 @@ public class FolderDAO extends AbstractDAO<IrisFolder> implements IFolderDAO {
 	
 	public IrisFolder findByName(String folderName) throws DBException {
 		try {
-			startSession();
+			startSession(false);
 			List<IrisFolder> entries = session.createQuery(FIND_BY_NAME).setParameter("pName", folderName).list();
 
 			if (entries != null && entries.size() == 1) {
@@ -33,11 +33,5 @@ public class FolderDAO extends AbstractDAO<IrisFolder> implements IFolderDAO {
 		} finally {
 			closeSession();
 		}
-	}
-
-	@Override
-	public void save(IrisFolder folder) throws DBException {
-		// TODO Auto-generated method stub
-		throw new DBException("Not implemented yet!", new Exception());
 	}
 }

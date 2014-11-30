@@ -1,4 +1,4 @@
-package br.unb.cic.iris.core;
+package br.unb.cic.iris.persistence.sqlite3;
 
 import org.hibernate.Session;
 import org.junit.Assert;

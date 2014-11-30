@@ -1,6 +1,8 @@
 package br.unb.cic.iris.persistence.lucene;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.lucene.document.Document;
@@ -24,6 +26,8 @@ import br.unb.cic.iris.persistence.IFolderDAO;
 
 public class FolderDAO implements IFolderDAO {
 
+	private static int MAX_NUMBER_OF_FOLDERS = 10;
+	
 	private static FolderDAO instance;
 	
 	private FolderDAO() {}
@@ -138,7 +142,7 @@ public class FolderDAO implements IFolderDAO {
 	// IMPORTANT: This method will need to be updated to support multiple folders. Probably, there'll be a property 
 	// `IrisFolder parent` in the `IrisFolder` class, so that a folder object knows its parent.
 	@Override
-	public void save(IrisFolder folder) throws DBException {
+	public void saveOrUpdate(IrisFolder folder) throws DBException {
 		try {			
 			if (folder.getId() == null) { // Create
 				create(null, folder);
@@ -218,6 +222,29 @@ public class FolderDAO implements IFolderDAO {
 		folder.setId(doc.getField("id").stringValue());
 		folder.setName(doc.getField("name").stringValue());
 		return folder;
+	}
+
+	@Override
+	public List<IrisFolder> findAll() throws DBException {
+		List<IrisFolder> folders = new ArrayList<IrisFolder>();
+		try {
+			Query typeQuery = new TermQuery(new Term("type", "irisFolder"));
+		
+			// Checks whether a folder with the given 'name' exists in the index.
+			BooleanQuery q = new BooleanQuery();
+			q.add(new BooleanClause(typeQuery, Occur.MUST));
+		
+			IndexSearcher searcher = IndexManager.getSearcher();
+			TopDocs docs = searcher.search(q, MAX_NUMBER_OF_FOLDERS);
+			
+			for(ScoreDoc sc : docs.scoreDocs) {
+				folders.add(fromLuceneDoc(searcher.doc(sc.doc)));
+			}
+			
+		}catch(Exception e) {
+			throw new DBException("could not list folders", e);
+		}
+		return folders;
 	}
 
 

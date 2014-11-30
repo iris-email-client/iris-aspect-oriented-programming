@@ -7,18 +7,19 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.unb.cic.iris.core.SystemFacade;
 import br.unb.cic.iris.core.model.IrisFolder;
-import br.unb.cic.iris.persistence.sqlite3.FolderDAO;
+import br.unb.cic.iris.persistence.IFolderDAO;
 
 public class TestFolderDAO {
 
 	private static final String DEFAULT_NAME = "test-folder";
-	private FolderDAO dao;
+	private IFolderDAO dao;
 	
 	@Before
 	public void setUp() throws Exception {
 		try {
-			dao = FolderDAO.instance();
+			dao = SystemFacade.instance().getDaoFactory().createFolderDAO();
 		}
 		catch(Exception e) {
 			throw new Exception("could not setUp the tests", e);
@@ -29,7 +30,10 @@ public class TestFolderDAO {
 	public void save() {
 		try {
 			IrisFolder folder = new IrisFolder(DEFAULT_NAME);
-			dao.saveOrUpdate(folder);
+			IrisFolder foundFolder = dao.findByName(DEFAULT_NAME);
+			//TODO: Implement folder deletion and add and delete every time!
+			if (foundFolder == null)
+				dao.saveOrUpdate(folder);
 			
 			List<IrisFolder> all = dao.findAll();
 			for(IrisFolder f: all){
@@ -38,7 +42,7 @@ public class TestFolderDAO {
 			Assert.assertTrue(!all.isEmpty());
 			
 			//Clean up
-			dao.delete(folder);
+			//dao.delete(folder);
 		}
 		catch(Exception e) {
 			e.printStackTrace();

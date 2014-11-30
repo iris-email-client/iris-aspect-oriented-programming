@@ -35,13 +35,13 @@ public final class AddressBookDAO extends AbstractDAO<AddressBookEntry> implemen
 	public AddressBookEntry find(String nick) throws DBException {
 		try {
 			//session = HibernateUtil.getSessionFactory().openSession();
-			startSession();
+			startSession(false);
 			List<AddressBookEntry> entries = session.createQuery(FIND_BY_NICK_NAME).setParameter("pNick", nick).list();
 			
 			if(entries != null && entries.size() == 1) {
 				return entries.get(0);
 			}
-			session.getTransaction().commit();
+			//session.getTransaction().commit();
 			return null;
 		} catch(Exception e) {
 			throw new DBException("could not save the address book entry", e);	

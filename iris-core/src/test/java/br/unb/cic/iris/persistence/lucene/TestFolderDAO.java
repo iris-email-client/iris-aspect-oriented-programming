@@ -93,15 +93,15 @@ public class TestFolderDAO extends TestLucene {
 		
 	@Test
 	public void testSave() throws IOException, DBException {
-		folderDAO.save(folder1);
-		folderDAO.save(folder2);
+		folderDAO.saveOrUpdate(folder1);
+		folderDAO.saveOrUpdate(folder2);
 		assertNotNull(folder1.getId());
 		assertNotNull(folder2.getId());
 	}
 	
 	@Test
 	public void testFindByName() throws DBException {
-		folderDAO.save(folder1);
+		folderDAO.saveOrUpdate(folder1);
 		
 		IrisFolder folder = folderDAO.findByName(folder1.getName());
 		assertNotNull(folder);

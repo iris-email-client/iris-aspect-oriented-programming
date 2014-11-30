@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import br.unb.cic.iris.command.CommandListener;
-import br.unb.cic.iris.command.CommandNotFoundException;
 import br.unb.cic.iris.command.ICommandManager;
 import br.unb.cic.iris.command.MailCommand;
 import br.unb.cic.iris.core.BaseManager;

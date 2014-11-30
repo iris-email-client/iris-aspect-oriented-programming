@@ -8,8 +8,6 @@ import br.unb.cic.iris.core.exception.EmailException;
 import br.unb.cic.iris.core.model.EmailMessage;
 import br.unb.cic.iris.core.model.IrisFolder;
 import br.unb.cic.iris.mail.provider.GmailProvider;
-import br.unb.cic.iris.persistence.sqlite3.AddressBookDAO;
-import br.unb.cic.iris.util.EmailValidator;
 
 public class EmailClient implements IEmailClient {
 	public static final String CHARACTER_ENCODING = "UTF-8";

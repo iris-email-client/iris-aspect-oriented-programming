@@ -1,0 +1,9 @@
+<configurationModel xmlns="ck.v20090401">
+    <configuration xmlns="">
+        <expression>iris</expression>
+        <transformation>
+            <name>selectComponents</name>
+            <args>basePomXML</args>
+        </transformation>
+    </configuration>
+</configurationModel>
