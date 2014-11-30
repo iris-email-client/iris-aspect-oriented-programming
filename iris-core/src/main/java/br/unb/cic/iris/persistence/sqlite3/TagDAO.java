@@ -40,13 +40,27 @@ public final class TagDAO extends PersistentSessionAbstractDAO<Tag> implements I
 	}
 
 	@Override
-	public List<Tag> findTagsByEmailMessage(EmailMessage message)
+	public List<Tag> findTagsByEmailMessage(String messageId)
 			throws DBException {
 		
 		try {
+			EmailMessage message = EmailDAO.instance().findById(messageId);
 			startSession();
 			List<Tag> tags = (List<Tag>) session.createQuery(FIND_BY_MESSAGE).setParameter("pMessage", message).list();
 			return tags;
+		} catch (Exception e) {
+			throw new DBException(message("error.unknown.database.error"), e);
+		}
+	}
+	
+	@Override
+	public void addTagToMessage(String messageId, String tagName) throws DBException {
+		try {
+			EmailMessage message = EmailDAO.instance().findById(messageId);
+			startSession();
+			Tag tag = new Tag(tagName);
+			tag.getMessages().add(message);
+			saveOrUpdate(tag);
 		} catch (Exception e) {
 			throw new DBException(message("error.unknown.database.error"), e);
 		}

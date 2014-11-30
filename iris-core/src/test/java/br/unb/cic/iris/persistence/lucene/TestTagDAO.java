@@ -49,8 +49,8 @@ public class TestTagDAO extends TestLucene {
 	public void testAddTagToMessage() throws DBException {
 		tagDAO.addTagToMessage(msg1.getId(), TAG_NAME);
 		Tag tag = tagDAO.findOrCreateByName(TAG_NAME);
-		List<Tag> tags = tagDAO.findTagsByEmailMessage(msg1);
-		List<Tag> existingTags = tagDAO.getAll();
+		List<Tag> tags = tagDAO.findTagsByEmailMessage(msg1.getId());
+		List<Tag> existingTags = tagDAO.findAll();
 		
 		Assert.assertTrue(tag.getMessages().contains(msg1));
 		Assert.assertTrue(tags.contains(tag));

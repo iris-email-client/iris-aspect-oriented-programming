@@ -9,4 +9,5 @@ public interface DAOFactory {
 	public IAddressBookDAO createAddressBookDAO();
 	public IEmailDAO createEmailDAO();
 	public IFolderDAO createFolderDAO();
+	public ITagDAO createTagDAO();
 }

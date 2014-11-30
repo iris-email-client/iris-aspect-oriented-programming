@@ -59,25 +59,20 @@ public class TestTagDAO {
 	public void addTagToMessage() throws Exception {
 		try {
 			
+			tagDao.addTagToMessage(message.getId(), TAG_NAME1);
 			tag1 = tagDao.findOrCreateByName(TAG_NAME1);
-			tag1.getMessages().add(message);
-			tagDao.saveOrUpdate(tag1);
 			
-			List<Tag> tags = tagDao.findTagsByEmailMessage(message);
+			List<Tag> tags = tagDao.findTagsByEmailMessage(message.getId());
 			
 			Assert.assertTrue("The retrieved set of tags for message does not contain added tag1!", tags.contains(tag1));
 			
+			tagDao.addTagToMessage(message.getId(), TAG_NAME2);
 			tag2 = tagDao.findOrCreateByName(TAG_NAME2);
-			tag2.getMessages().add(message);
-			tagDao.saveOrUpdate(tag2);
 			
-			tags = tagDao.findTagsByEmailMessage(message);
+			tags = tagDao.findTagsByEmailMessage(message.getId());
 			
 			Assert.assertTrue("The retrieved set of tags for message does not contain added tag1!", tags.contains(tag1));
 			Assert.assertTrue("The retrieved set of tags for message does not contain added tag2!", tags.contains(tag2));
-			for (Tag t : tags) {
-				Assert.assertTrue("Tag " + t.getName() + " should have message1 but doens't!", t.getMessages().contains(message));
-			}
 			
 		}
 		catch(Exception e) {
@@ -91,7 +86,7 @@ public class TestTagDAO {
 		tag1.getMessages().add(message);
 		tagDao.saveOrUpdate(tag1);
 		
-		List<Tag> tags = tagDao.findTagsByEmailMessage(message);
+		List<Tag> tags = tagDao.findTagsByEmailMessage(message.getId());
 		
 		Assert.assertTrue("The retrieved set of tags for message does not contain added tag1!", tags.contains(tag1));
 		
@@ -99,7 +94,7 @@ public class TestTagDAO {
 		tag1.getMessages().remove(message);
 		tagDao.saveOrUpdate(tag1);
 		
-		tags = tagDao.findTagsByEmailMessage(message);
+		tags = tagDao.findTagsByEmailMessage(message.getId());
 		
 		Assert.assertTrue("Failed to remove tag1 from message!", !tags.contains(tag1));
 	}
@@ -111,7 +106,7 @@ public class TestTagDAO {
 		tagDao.saveOrUpdate(tag1);
 		
 		tagDao.delete(tag1);
-		List<Tag> tags = tagDao.findTagsByEmailMessage(message);
+		List<Tag> tags = tagDao.findTagsByEmailMessage(message.getId());
 		Assert.assertTrue("Failed to delete tag1!", !tags.contains(tag1));
 		
 		tag1 = null;

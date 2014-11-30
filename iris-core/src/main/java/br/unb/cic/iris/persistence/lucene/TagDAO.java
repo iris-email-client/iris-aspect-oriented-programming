@@ -59,14 +59,14 @@ public class TagDAO extends LuceneDoc<Tag> implements ITagDAO {
 	}
 
 	@Override
-	public List<Tag> findTagsByEmailMessage(EmailMessage message)
+	public List<Tag> findTagsByEmailMessage(String messageId)
 			throws DBException {
 		try {
-			if(message.getId() == null)
+			if(messageId == null)
 				throw new DBException("Tried to retrieve tags for message of ID null.", new Exception());
 			
 			Query typeQuery = new TermQuery(new Term("type", "email"));
-			Query idQuery = new TermQuery(new Term("id", message.getId()));
+			Query idQuery = new TermQuery(new Term("id", messageId));
 			
 			// Checks whether an address book entry with the given 'id' exists in the index.
 			BooleanQuery q = new BooleanQuery();
@@ -87,6 +87,7 @@ public class TagDAO extends LuceneDoc<Tag> implements ITagDAO {
 		}
 	}
 	
+	@Override
 	public void addTagToMessage(String messageId, String tagName) throws DBException {
 		try {
 			if(messageId == null)
@@ -130,7 +131,8 @@ public class TagDAO extends LuceneDoc<Tag> implements ITagDAO {
 		}
 	}
 	
-	public List<Tag> getAll() throws DBException {
+	@Override
+	public List<Tag> findAll() throws DBException {
 		try {
 			Query q = new TermQuery(new Term("type", "tags"));
 			
@@ -198,42 +200,13 @@ public class TagDAO extends LuceneDoc<Tag> implements ITagDAO {
 	}
 
 	@Override
-	public void saveOrUpdate(Tag tag) throws DBException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void delete(Tag tag) throws DBException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	protected Document toLuceneDoc(Tag t) {
-		List<Field> fields = new ArrayList<Field>();
-		fields.add(new StringField("type", "tag", Store.YES));
-		fields.add(new StringField("name", t.getName(), Store.YES));
-		if (t.getMessages().size() == 1)
-			fields.add(new StringField("messageId", t.getMessages().iterator().next().getId(), Store.YES));
-		
-		Document doc = new Document();
-		for (Field f : fields)
-			doc.add(f);
-		
-		return doc;
+		throw new RuntimeException("lucene.TagDAO.toLuceneDoc() shouldn't be called! No implementation should be provided.");
 	}
 
 	@Override
 	protected Tag fromLuceneDoc(Document doc) {
-		Tag tag = new Tag();
-		tag.setId(doc.getField("id").stringValue());
-		tag.setName(doc.getField("name").stringValue());
-		EmailMessage email = new EmailMessage();
-		email.setId(doc.getField("messageId").stringValue());
-		tag.getMessages().add(email);
-		
-		return tag;
+		throw new RuntimeException("lucene.TagDAO.fromLuceneDoc() shouldn't be called! No implementation should be provided.");
 	}
 
 }

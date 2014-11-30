@@ -1,21 +1,23 @@
 package br.unb.cic.iris.core;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import br.unb.cic.iris.core.exception.DBException;
 import br.unb.cic.iris.core.model.EmailMessage;
 import br.unb.cic.iris.core.model.Tag;
-
-/**
- * A dummy class to compile the program. 
- * @TODO: Daniel Sandoval is working on this class 
- * in another branch. Remove this comment later. 
- */
+import br.unb.cic.iris.persistence.ITagDAO;
 
 public class TagManager extends Manager {
 	
 	private static TagManager instance;
 	
-	private TagManager() {}
+	private ITagDAO dao;
+	
+	private TagManager() {
+		super();
+		dao = getDaoFactory().createTagDAO();
+	}
 	
 	public static TagManager instance() {
 		if(instance == null) {
@@ -25,17 +27,30 @@ public class TagManager extends Manager {
 	}
 
 	public List<EmailMessage> listMessagesByTag(String tag) {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("TagManager.listMessagesByTag(...) - not implemented yet!");
+		List<EmailMessage> messages;
+		try {
+			messages = new ArrayList<EmailMessage>(dao.findOrCreateByName(tag).getMessages());
+			return messages;
+		} catch (DBException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public void saveTags(String id, String tags) {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("TagManager.saveTags(...) - not implemented yet!");
+		try {
+			dao.addTagToMessage(id, tags);
+		} catch (DBException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public List<Tag> findAll() {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("TagManager.findAll(...) - not implemented yet!");
+		try {
+			return dao.findAll();
+		} catch (DBException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

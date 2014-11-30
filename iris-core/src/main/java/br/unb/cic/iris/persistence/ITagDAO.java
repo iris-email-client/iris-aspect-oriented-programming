@@ -10,10 +10,10 @@ public interface ITagDAO {
 	
 	public Tag findOrCreateByName(String name) throws DBException;
 	
-	public List<Tag> findTagsByEmailMessage(EmailMessage message) throws DBException;
+	public List<Tag> findTagsByEmailMessage(String messageId) throws DBException;
 	
-	public void saveOrUpdate(Tag tag) throws DBException;
+	public List<Tag> findAll() throws DBException;
 	
-	public void delete(Tag tag) throws DBException;
+	public void addTagToMessage(String messageId, String tagName) throws DBException;
 
 }
