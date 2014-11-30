@@ -50,9 +50,11 @@ public class TestTagDAO extends TestLucene {
 		tagDAO.addTagToMessage(msg1.getId(), TAG_NAME);
 		Tag tag = tagDAO.findOrCreateByName(TAG_NAME);
 		List<Tag> tags = tagDAO.findTagsByEmailMessage(msg1);
+		List<Tag> existingTags = tagDAO.getAll();
 		
 		Assert.assertTrue(tag.getMessages().contains(msg1));
 		Assert.assertTrue(tags.contains(tag));
+		Assert.assertTrue(existingTags.contains(tag));
 	}
 	
 }

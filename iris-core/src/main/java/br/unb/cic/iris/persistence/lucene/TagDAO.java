@@ -111,6 +111,7 @@ public class TagDAO extends LuceneDoc<Tag> implements ITagDAO {
 				if (tags != null && tags.contains(newTag)) {
 					return; //Message already has tag.
 				} else {
+					registerTag(tagName);
 					if (tagString != null && !"".equals(tagString)) {
 						tagString += "," + tagName;
 					} else {
@@ -126,6 +127,61 @@ public class TagDAO extends LuceneDoc<Tag> implements ITagDAO {
 				throw new DBException("The specified message does not exist.", new Exception());
 		} catch (IOException e) {
 			throw new DBException("Error occurred while trying to retrieve tags for message.", e);
+		}
+	}
+	
+	public List<Tag> getAll() throws DBException {
+		try {
+			Query q = new TermQuery(new Term("type", "tags"));
+			
+			IndexSearcher searcher = IndexManager.getSearcher();
+			TopDocs docs = searcher.search(q, 1);
+			
+			if (docs.totalHits > 0) {
+				Document doc = searcher.doc(docs.scoreDocs[0].doc);
+				String tagString = doc.get("registeredTags");
+				return tagsFromString(tagString);
+			} else {
+				return new ArrayList<Tag>();
+			}
+		} catch (IOException e) {
+			throw new DBException("Error occurred while trying to retrieve tags.", e);
+		}
+	}
+	
+	private void registerTag(String tagName) throws IOException {
+		Query q = new TermQuery(new Term("type", "tags"));
+		Tag newTag = new Tag(tagName);
+		
+		IndexSearcher searcher = IndexManager.getSearcher();
+		TopDocs docs = searcher.search(q, 1);				
+
+		if (docs.totalHits > 0) {
+			Document doc = searcher.doc(docs.scoreDocs[0].doc);
+			String tagString = doc.get("registeredTags");
+			List<Tag> tags = tagsFromString(tagString);
+			if (tags != null && tags.contains(newTag)) {
+				return; //Message already has tag.
+			} else {
+				if (tagString != null && !"".equals(tagString)) {
+					tagString += "," + tagName;
+				} else {
+					tagString = tagName;
+				}
+				doc.add(new StringField("registeredTags", tagString, Store.YES));
+				doc.add(new StringField("type", "tags", Store.YES));
+				IndexWriter writer = IndexManager.getWriter();
+				writer.updateDocument(new Term("type", "tags"), doc);
+				writer.commit();
+			}
+		} else {
+			//Create tags document
+			Document doc = new Document();
+			doc.add(new StringField("type", "tags", Store.YES));
+			doc.add(new StringField("registeredTags", tagName, Store.YES));
+			IndexWriter writer = IndexManager.getWriter();
+			writer.addDocument(doc);
+			writer.commit();
 		}
 	}
 	
