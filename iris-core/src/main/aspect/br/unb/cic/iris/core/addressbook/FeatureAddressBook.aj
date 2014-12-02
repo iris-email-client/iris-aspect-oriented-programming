@@ -47,6 +47,7 @@ public privileged aspect FeatureAddressBook {
 		IAddressBookDAO dao = getDaoFactory().createAddressBookDAO();
 		return dao.find(name);
 	}
+	
 	public List<AddressBookEntry> br.unb.cic.iris.core.SystemFacade.listAddressBook() throws EmailException {
 		return getDaoFactory().createAddressBookDAO().findAll();
 	}

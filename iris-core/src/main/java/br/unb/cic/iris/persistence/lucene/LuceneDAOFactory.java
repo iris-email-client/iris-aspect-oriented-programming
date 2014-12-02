@@ -7,7 +7,6 @@ import br.unb.cic.iris.persistence.DAOFactory;
 import br.unb.cic.iris.persistence.IAddressBookDAO;
 import br.unb.cic.iris.persistence.IEmailDAO;
 import br.unb.cic.iris.persistence.IFolderDAO;
-import br.unb.cic.iris.persistence.ITagDAO;
 
 public class LuceneDAOFactory implements DAOFactory {
 
@@ -60,8 +59,8 @@ public class LuceneDAOFactory implements DAOFactory {
 		return FolderDAO.instance();
 	}
 	
-	public ITagDAO createTagDAO() {
-		return TagDAO.instance();
-	}
+//	public ITagDAO createTagDAO() {
+//		return TagDAO.instance();
+//	}
 
 }

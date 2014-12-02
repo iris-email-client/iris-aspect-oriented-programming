@@ -9,7 +9,6 @@ import br.unb.cic.iris.core.SystemFacade;
 import br.unb.cic.iris.core.exception.EmailException;
 import br.unb.cic.iris.core.model.EmailMessage;
 import br.unb.cic.iris.core.model.IrisFolder;
-import br.unb.cic.iris.persistence.sqlite3.EmailDAO;
 
 public class DownloadMessagesConsoleCommand extends AbstractMailCommand {
 	static final String COMMAND_NAME = "download";
@@ -31,7 +30,7 @@ public class DownloadMessagesConsoleCommand extends AbstractMailCommand {
 		SystemFacade.instance().downloadMessages(folder);
 
 		//just to test ... TODO remove for production
-		List<EmailMessage> list = EmailDAO.instance().findAll();
+		List<EmailMessage> list = SystemFacade.instance().getMessages(folder);
 		for(EmailMessage msg: list){
 			System.out.println("---> "+msg.getFrom()+" -- "+msg.getSubject());
 		}

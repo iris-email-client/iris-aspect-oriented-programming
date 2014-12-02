@@ -12,15 +12,15 @@ import org.junit.Test;
 import br.unb.cic.iris.core.model.EmailMessage;
 import br.unb.cic.iris.core.model.IrisFolder;
 import br.unb.cic.iris.core.model.Tag;
-import br.unb.cic.iris.persistence.sqlite3.EmailDAO;
-import br.unb.cic.iris.persistence.sqlite3.FolderDAO;
-import br.unb.cic.iris.persistence.sqlite3.TagDAO;
+import br.unb.cic.iris.persistence.IEmailDAO;
+import br.unb.cic.iris.persistence.IFolderDAO;
+import br.unb.cic.iris.persistence.ITagDAO;
 
 public class TestTagDAO {
 	
-	private TagDAO tagDao;
-	private EmailDAO emailDao;
-	private FolderDAO folderDao;
+	private ITagDAO tagDao;
+	private IEmailDAO emailDao;
+	private IFolderDAO folderDao;
 	
 	private EmailMessage message;
 	private IrisFolder folder;
@@ -35,9 +35,9 @@ public class TestTagDAO {
 	@Before
 	public void setUp() throws Exception {
 		try {
-			tagDao = TagDAO.instance();
-			emailDao = EmailDAO.instance();
-			folderDao = FolderDAO.instance();
+			tagDao = SystemFacade.instance().getDaoFactory().createTagDAO();
+			emailDao = SystemFacade.instance().getDaoFactory().createEmailDAO();
+			folderDao = SystemFacade.instance().getDaoFactory().createFolderDAO();
 			
 			folder = folderDao.findByName(TEST_FOLDER_NAME);
 			if (folder == null) {

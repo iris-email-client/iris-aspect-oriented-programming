@@ -19,3 +19,19 @@ By following the steps below in order you shouldn't get in trouble:
 5. Clone this repository and import the project in Eclipse as an existing Maven project;
 6. Install whatever Eclipse suggests;
 7. Have fun! :-)
+
+
+## Known issues
+
+(a) building a product with relational persistence requires a review of the hibernate.cfg.xml, because some of
+the domain classes (such as addres book entry / tag) might not be available in a given product.
+
+(b) it is necessary to clear the ~/.iris/lucene_idx folder, otherwise the unit test
+*testFind(br.unb.cic.iris.persistence.lucene.TestAddressBookDAO)* fails.
+
+(c) there duplicated folders in LUCENE implementation. I suppose that unit tests
+are populating the same lucene database as the *production* version.
+
+(d) changing a folder (e.g. INBOX or OUTBOX) in LUCENE is not working. This might occur
+because the index is different. We should change to a folder based on the name, not the
+id. 

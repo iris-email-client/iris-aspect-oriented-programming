@@ -10,10 +10,17 @@ instance-model02
  - iris
  - services(sendMessage, receiveMessage)
  - addressBook
- - persistence(relational)
+ - persistence(nonRelational)
 
 instance-model03
  - iris
  - services(sendMessage, receiveMessage)
- - persistnce(nonRelational)
+ - persistence(nonRelational)
+
+instance-model04
+-iris
+- services(sendMessage, receiveMessage)
+- persistence(nonRelational)
+- tagging
+
  

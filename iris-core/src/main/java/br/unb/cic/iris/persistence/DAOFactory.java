@@ -6,8 +6,8 @@ package br.unb.cic.iris.persistence;
  * @author rbonifacio
  */
 public interface DAOFactory {
-	public IAddressBookDAO createAddressBookDAO();
+//	public IAddressBookDAO createAddressBookDAO();
 	public IEmailDAO createEmailDAO();
 	public IFolderDAO createFolderDAO();
-	public ITagDAO createTagDAO();
+//	public ITagDAO createTagDAO();
 }

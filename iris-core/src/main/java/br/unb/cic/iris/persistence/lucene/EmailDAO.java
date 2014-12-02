@@ -3,6 +3,7 @@ package br.unb.cic.iris.persistence.lucene;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -142,7 +143,7 @@ public class EmailDAO extends LuceneDoc<EmailMessage> implements IEmailDAO {
 		fields.add(new StringField("bcc", m.getBcc(), Store.YES));
 		fields.add(new TextField("subject", m.getSubject(), Store.YES));
 		fields.add(new TextField("message", m.getMessage(), Store.YES));
-		fields.add(new StringField("date", DateTools.dateToString(m.getDate(),
+		fields.add(new StringField("date", DateTools.dateToString(m.getDate() == null ? Calendar.getInstance().getTime() : m.getDate() ,
 				DateTools.Resolution.SECOND), Store.YES));
 		if (m.getFolder() != null)
 			fields.add(new StringField("folderId", m.getFolder().getId(), Store.YES));
@@ -205,6 +206,11 @@ public class EmailDAO extends LuceneDoc<EmailMessage> implements IEmailDAO {
 			throw new DBException("message '" + uuid + "' not found.", e);
 		}
 		return message;
+	}
+
+	@Override
+	public void delete(EmailMessage message) throws DBException {
+		throw new RuntimeException("method delete on lucene.EmailDAO has not been implemented yet");
 	}
 
 }

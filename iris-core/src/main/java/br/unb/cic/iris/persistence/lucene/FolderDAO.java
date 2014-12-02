@@ -247,5 +247,10 @@ public class FolderDAO implements IFolderDAO {
 		return folders;
 	}
 
+	@Override
+	public void delete(IrisFolder folder) throws DBException {
+		throw new RuntimeException("method delete on lucene.FolderDAO has not been implemented yet");
+	}
+
 
 }

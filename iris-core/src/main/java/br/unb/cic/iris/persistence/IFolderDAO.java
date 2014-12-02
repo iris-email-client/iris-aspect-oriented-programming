@@ -13,5 +13,6 @@ public interface IFolderDAO {
 	public IrisFolder findByName(String folderName) throws DBException;
 	
 	public List<IrisFolder> findAll() throws DBException;
-	
+
+	public void delete(IrisFolder folder) throws DBException;
 }

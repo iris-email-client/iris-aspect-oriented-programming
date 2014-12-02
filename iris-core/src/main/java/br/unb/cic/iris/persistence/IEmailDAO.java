@@ -36,4 +36,5 @@ public interface IEmailDAO {
 	
 	public EmailMessage findById(String uuid) throws DBException;
 
+	public void delete(EmailMessage message) throws DBException;
 }

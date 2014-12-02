@@ -1,16 +1,12 @@
 package br.unb.cic.iris.persistence.lucene;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.lucene.document.DateTools;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.StringField;
-import org.apache.lucene.document.TextField;
 import org.apache.lucene.document.Field.Store;
+import org.apache.lucene.document.StringField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
@@ -20,10 +16,8 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.search.TopFieldDocs;
 
 import br.unb.cic.iris.core.exception.DBException;
-import br.unb.cic.iris.core.model.EmailMessage;
 import br.unb.cic.iris.core.model.Tag;
 import br.unb.cic.iris.persistence.ITagDAO;
 
@@ -207,6 +201,17 @@ public class TagDAO extends LuceneDoc<Tag> implements ITagDAO {
 	@Override
 	protected Tag fromLuceneDoc(Document doc) {
 		throw new RuntimeException("lucene.TagDAO.fromLuceneDoc() shouldn't be called! No implementation should be provided.");
+	}
+
+	
+	@Override
+	public void delete(Tag tag) throws DBException {
+		throw new RuntimeException("method delete on lucene.TagDAO has not been implemented yet");
+	}
+
+	@Override
+	public void saveOrUpdate(Tag tag) throws DBException {
+		throw new RuntimeException("method delete on lucene.TagDAO has not been implemented yet");
 	}
 
 }

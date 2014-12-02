@@ -18,10 +18,17 @@
       <expression>Not(addressBook)</expression>
        <transformation>
             <name>removeComponents</name>
-	    <args>addressBookAspect, addressBookFacade, addressBookModel, addressBookCommand, addressBookTest, addressBookDAOTest</args>
+	    <args>addressBookAspect, addressBookFacade, addressBookModel, addressBookCommand, addressBookTest, addressBookDAOTest,addressBookDAOLucene,addressBookDAOSQLite,sqliteCodeAddressBookDAOFactory,luceneCodeAddressBookDAOFactory</args>
         </transformation>
     </configuration>
     <configuration>
+      <expression>Not(tagging)</expression>
+       <transformation>
+            <name>removeComponents</name>
+	    <args>tagCommand, tagManager, tagModel, tagDAO, tagDAOSQLite, tagDAOLucene, tagDAOLuceneTest, tagDAOTest, sqliteCodeTagDAOFactory, luceneCodeTagDAOFactory</args>
+        </transformation>
+    </configuration>
+    <configuration>     
     <expression>relational</expression>
        <transformation>
           <name>setPropertyInFile</name>
@@ -33,7 +40,7 @@
         </transformation>
 	<transformation>
             <name>removeComponents</name>
-	    <args>luceneCode,luceneTest</args>
+	    <args>luceneCode,luceneCodeFactory, luceneTest, luceneCodeTagFactory</args>
         </transformation>
     </configuration>
     <configuration>
@@ -48,7 +55,7 @@
         </transformation>
        <transformation>
             <name>removeComponents</name>
-	    <args>sqliteCode, sqliteTest</args>
+	    <args>sqliteCode, sqliteCodeFactory, sqliteTest, tagDAOTest, sqliteCodeTagFactory</args>
         </transformation>
     </configuration>
 </configurationModel>
