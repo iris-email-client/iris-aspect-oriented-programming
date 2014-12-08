@@ -11,10 +11,10 @@ import org.junit.Test;
 
 import br.unb.cic.iris.core.model.EmailMessage;
 import br.unb.cic.iris.core.model.IrisFolder;
-import br.unb.cic.iris.core.model.Tag;
 import br.unb.cic.iris.persistence.IEmailDAO;
 import br.unb.cic.iris.persistence.IFolderDAO;
-import br.unb.cic.iris.persistence.ITagDAO;
+import br.unb.cic.iris.tag.model.Tag;
+import br.unb.cic.iris.tag.persistence.ITagDAO;
 
 public class TestTagDAO {
 	

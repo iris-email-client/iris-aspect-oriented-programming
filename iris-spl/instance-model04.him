@@ -4,4 +4,3 @@ sendMessage
 receiveMessage
 persistence
 nonRelational
-tagging

@@ -21,7 +21,7 @@ public class ConsoleListFoldersCommand extends AbstractMailCommand {
 	public void handleExecute() throws EmailException {
 		List<IrisFolder> irisFolders = FolderManager.instance().listFolders();
 		for (IrisFolder folder : irisFolders) {
-			System.out.printf(" + %s%n", folder.getName());
+			System.out.println(" + " + folder.getName() + " (" + folder.getId() + " )");
 		}
 	}
 

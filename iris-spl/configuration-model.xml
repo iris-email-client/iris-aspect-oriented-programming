@@ -18,7 +18,7 @@
       <expression>Not(addressBook)</expression>
        <transformation>
             <name>removeComponents</name>
-	    <args>addressBookFeature, addressBookCommand, addressBookTest, addressBookDAOTest,addressBookDAOLucene,addressBookDAOSQLite</args>
+	    <args>addressBookFeature, addressBookCommand, addressBookTest, addressBookDAOTest,addressBookDAOTestLucene,addressBookDAOLucene,addressBookDAOSQLite</args>
         </transformation>
     </configuration>
     <configuration>
@@ -40,7 +40,7 @@
         </transformation>
 	<transformation>
             <name>removeComponents</name>
-	    <args>luceneCode,luceneCodeFactory, luceneTest, luceneCodeTagFactory, addressBookDAOLucene</args>
+	    <args>luceneCode,luceneCodeFactory, luceneTest, luceneCodeTagFactory, tagDAOLucene, addressBookDAOLucene</args>
         </transformation>
     </configuration>
     <configuration>
@@ -55,7 +55,7 @@
         </transformation>
        <transformation>
             <name>removeComponents</name>
-	    <args>sqliteCode, sqliteCodeFactory, sqliteTest, tagDAOTest, sqliteCodeTagFactory, addressBookDAOSQLite</args>
+	    <args>sqliteCode, sqliteCodeFactory, sqliteTest, tagDAOTest, tagDAOSQLite, addressBookDAOSQLite</args>
         </transformation>
     </configuration>
 </configurationModel>

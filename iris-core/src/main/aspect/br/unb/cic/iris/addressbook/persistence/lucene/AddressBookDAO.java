@@ -1,4 +1,4 @@
-package 
+package br.unb.cic.iris.addressbook.persistence.lucene;
 
 import java.io.IOException;
 import java.util.ArrayList;

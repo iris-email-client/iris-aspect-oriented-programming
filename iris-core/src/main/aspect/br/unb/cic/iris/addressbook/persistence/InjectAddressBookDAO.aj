@@ -4,7 +4,7 @@ import java.util.logging.Logger;
 
 import br.unb.cic.iris.persistence.InjectDAOFactory;
 
-public privileged aspect FeatureAddressBookDAO {
+public privileged aspect InjectAddressBookDAO {
 
 	private static final String BASE_PACKAGE = "br.unb.cic.iris.addressbook.persistence";
 	private static final String CLASS =  "AddressBookDAO";

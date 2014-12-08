@@ -22,7 +22,7 @@ public class PersistentSessionAbstractDAO<T> {
 	public PersistentSessionAbstractDAO(){
 		clazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 		System.out.println("******************************** CLAZZ="+clazz);
-		startSession();
+		startSession(true);
 	}
 	
 	/**
@@ -68,7 +68,7 @@ public class PersistentSessionAbstractDAO<T> {
         		setId.invoke(obj, UUID.randomUUID().toString());
         	// else... It should be treated as an update operation!
         	
-            startSession();
+            startSession(true);
             session.saveOrUpdate(obj);
             session.getTransaction().commit();
         } catch (HibernateException e) {
@@ -76,26 +76,35 @@ public class PersistentSessionAbstractDAO<T> {
         } catch (Exception e) {
         	throw new DBException("Couldn't call `getId()` or `setId()` methods on entity.", e);
         }
+        finally{
+        	closeSession();
+        }
     }
 	
 	public void delete(T t) throws DBException {
 		try {
-            startSession();
+            startSession(true);
             session.delete(t);
             session.getTransaction().commit();
         } catch (HibernateException e) {
             handleException(e);
         }
+		finally {
+			closeSession();
+		}
 	}
 	
 	public T findById(Long id) throws DBException {
         T obj = null;
         try {
-            startSession();
+            startSession(false);
             obj = (T) session.load(clazz, id);
             session.getTransaction().commit();
         } catch (HibernateException e) {
             handleException(e);
+        }
+        finally  {
+        	closeSession();
         }
         return obj;
     }
@@ -103,12 +112,15 @@ public class PersistentSessionAbstractDAO<T> {
     public List<T> findAll() throws DBException {
         List<T> objects = null;
         try {
-            startSession();
+            startSession(false);
             Query query = session.createQuery("from " + clazz.getName());
             objects = query.list();
             session.getTransaction().commit();
         } catch (HibernateException e) {
             handleException(e);
+        }
+        finally {
+        	closeSession();
         }
         return objects;
     }
@@ -128,15 +140,17 @@ public class PersistentSessionAbstractDAO<T> {
 	}
 	
 	protected void handleException(Exception e) throws DBException {
-		session.getTransaction().rollback();
+		if(session.getTransaction().isActive()) {
+			session.getTransaction().rollback();
+		}
         throw new DBException(e.getMessage(), e);
     }
 
-    protected void startSession() throws HibernateException {
+    protected void startSession(boolean beginTransaction) throws HibernateException {
     	if (session == null || !session.isOpen()) {
     		session = HibernateUtil.getSessionFactory().openSession();
     	}
-    	if (!session.getTransaction().isActive()) {
+    	if (!session.getTransaction().isActive() && beginTransaction) {
             session.beginTransaction();
     	}
     }

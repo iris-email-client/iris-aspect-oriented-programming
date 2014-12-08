@@ -1,4 +1,4 @@
-package br.unb.cic.iris.persistence.lucene;
+package br.unb.cic.iris.tag.persistence.lucene;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,8 +18,11 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 
 import br.unb.cic.iris.core.exception.DBException;
-import br.unb.cic.iris.core.model.Tag;
-import br.unb.cic.iris.persistence.ITagDAO;
+import br.unb.cic.iris.persistence.lucene.EmailDAO;
+import br.unb.cic.iris.persistence.lucene.IndexManager;
+import br.unb.cic.iris.persistence.lucene.LuceneDoc;
+import br.unb.cic.iris.tag.model.Tag;
+import br.unb.cic.iris.tag.persistence.ITagDAO;
 
 public class TagDAO extends LuceneDoc<Tag> implements ITagDAO {
 	

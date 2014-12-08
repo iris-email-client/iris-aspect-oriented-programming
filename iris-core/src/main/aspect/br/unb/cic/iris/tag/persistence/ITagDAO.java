@@ -1,10 +1,10 @@
-package br.unb.cic.iris.persistence;
+package br.unb.cic.iris.tag.persistence;
 
 import java.util.List;
 
 import br.unb.cic.iris.core.exception.DBException;
 import br.unb.cic.iris.core.model.EmailMessage;
-import br.unb.cic.iris.core.model.Tag;
+import br.unb.cic.iris.tag.model.Tag;
 
 public interface ITagDAO {
 	

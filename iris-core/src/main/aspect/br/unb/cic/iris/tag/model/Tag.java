@@ -1,4 +1,4 @@
-package br.unb.cic.iris.core.model;
+package br.unb.cic.iris.tag.model;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,6 +13,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+
+import br.unb.cic.iris.core.model.EmailMessage;
 
 @Entity
 @Table(name = "TB_TAG")

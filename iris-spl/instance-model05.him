@@ -2,6 +2,6 @@ iris
 services
 sendMessage
 receiveMessage
-tagging
 persistence
-relational
+nonRelational
+addressBook

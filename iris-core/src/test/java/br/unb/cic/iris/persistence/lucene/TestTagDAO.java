@@ -12,8 +12,9 @@ import org.junit.Test;
 import br.unb.cic.iris.core.exception.DBException;
 import br.unb.cic.iris.core.model.EmailMessage;
 import br.unb.cic.iris.core.model.IrisFolder;
-import br.unb.cic.iris.core.model.Tag;
 import br.unb.cic.iris.persistence.IEmailDAO;
+import br.unb.cic.iris.tag.model.Tag;
+import br.unb.cic.iris.tag.persistence.lucene.TagDAO;
 
 public class TestTagDAO extends TestLucene {
 

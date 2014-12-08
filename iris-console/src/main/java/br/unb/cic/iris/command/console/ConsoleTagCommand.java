@@ -1,12 +1,13 @@
 package br.unb.cic.iris.command.console;
 
 import br.unb.cic.iris.command.AbstractMailCommand;
-import br.unb.cic.iris.core.TagManager;
 import br.unb.cic.iris.core.FolderManager;		
 import br.unb.cic.iris.core.exception.EmailException;
 import br.unb.cic.iris.core.model.EmailMessage;
-import br.unb.cic.iris.core.model.Tag;
 		
+import br.unb.cic.iris.tag.TagManager;
+import br.unb.cic.iris.tag.model.Tag;
+
 import java.security.InvalidParameterException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

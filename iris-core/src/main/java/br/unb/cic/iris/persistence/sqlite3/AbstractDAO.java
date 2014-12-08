@@ -21,7 +21,6 @@ public abstract class AbstractDAO<T> {
 	
 	public AbstractDAO(){
 		clazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-		System.out.println("******************************** CLAZZ="+clazz);
 	}
 	
 	/**
@@ -143,11 +142,12 @@ public abstract class AbstractDAO<T> {
     }
 
     protected void startSession(boolean beginTransaction) throws HibernateException {
-        session = HibernateUtil.getSessionFactory().openSession();
-        
-        if(beginTransaction) {
-        	session.beginTransaction();
-        }
+    	if (session == null || !session.isOpen()) {
+    		session = HibernateUtil.getSessionFactory().openSession();
+    	}
+    	if (!session.getTransaction().isActive() && beginTransaction) {
+            session.beginTransaction();
+    	}
     }
     
 	protected void closeSession() {
