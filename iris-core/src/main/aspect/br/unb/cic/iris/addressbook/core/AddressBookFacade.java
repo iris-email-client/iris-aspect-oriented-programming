@@ -1,9 +1,9 @@
-package br.unb.cic.iris.core.addressbook;
+package br.unb.cic.iris.addressbook.core;
 
 import java.util.List;
 
+import br.unb.cic.iris.addressbook.model.AddressBookEntry;
 import br.unb.cic.iris.core.exception.EmailException;
-import br.unb.cic.iris.core.model.AddressBookEntry;
 
 public interface AddressBookFacade {
 	/**

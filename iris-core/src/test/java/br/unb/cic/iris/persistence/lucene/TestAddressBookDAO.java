@@ -10,9 +10,10 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.unb.cic.iris.addressbook.model.AddressBookEntry;
+import br.unb.cic.iris.addressbook.persistence.IAddressBookDAO;
+import br.unb.cic.iris.addressbook.persistence.lucene.AddressBookDAO;
 import br.unb.cic.iris.core.exception.DBException;
-import br.unb.cic.iris.core.model.AddressBookEntry;
-import br.unb.cic.iris.persistence.IAddressBookDAO;
 
 public class TestAddressBookDAO extends TestLucene {
 

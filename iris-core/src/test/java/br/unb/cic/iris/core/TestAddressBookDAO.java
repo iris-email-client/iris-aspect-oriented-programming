@@ -4,9 +4,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.unb.cic.iris.addressbook.model.AddressBookEntry;
+import br.unb.cic.iris.addressbook.persistence.IAddressBookDAO;
 import br.unb.cic.iris.core.SystemFacade;
-import br.unb.cic.iris.core.model.AddressBookEntry;
-import br.unb.cic.iris.persistence.IAddressBookDAO;
 
 public class TestAddressBookDAO {
 

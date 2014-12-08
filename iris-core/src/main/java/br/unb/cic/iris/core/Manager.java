@@ -1,6 +1,6 @@
 package br.unb.cic.iris.core;
 
-import br.unb.cic.iris.persistence.DAOFactory;
+import br.unb.cic.iris.persistence.IDAOFactory;
 
 /**
  * An abstract class that defines a contract 
@@ -11,13 +11,13 @@ import br.unb.cic.iris.persistence.DAOFactory;
  * @author rbonifacio
  */
 public abstract class Manager {
-	private DAOFactory daoFactory;
+	private IDAOFactory daoFactory;
 
-	public DAOFactory getDaoFactory() {
+	public IDAOFactory getDaoFactory() {
 		return daoFactory;
 	}
 
-	public void setDaoFactory(DAOFactory daoFactory) {
+	public void setDaoFactory(IDAOFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
 }

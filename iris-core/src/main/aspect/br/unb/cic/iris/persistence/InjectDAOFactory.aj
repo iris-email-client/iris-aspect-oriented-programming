@@ -12,7 +12,24 @@ import java.util.logging.Logger;
  *  
  * @author rbonifacio
  */
-public privileged aspect PersistenceFeature {
+public privileged aspect InjectDAOFactory {
+
+	private static final String BASE_PACKAGE = "br.unb.cic.iris.persistence";
+	private static final String CLASS = "DAOFactory";
+	
+	public static String persistenceType() {
+		String fileName = "persistence.properties";
+		try {	
+			Logger.getLogger(InjectDAOFactory.class.getName()).info("Load properties" + fileName);
+			Properties properties = new Properties();
+			properties.load(InjectDAOFactory.class.getResourceAsStream("/" + fileName));
+			return properties.getProperty("factory");
+		}
+		catch(Exception e) {		
+			throw new RuntimeException("Could not read properties from " + fileName);
+		}
+	}
+	
 
 	//----------------------------------------------------
 	//That's is a nice pointcut.
@@ -20,7 +37,7 @@ public privileged aspect PersistenceFeature {
 	//within any subclass of Manager.
 	//----------------------------------------------------
 	
-	pointcut injectDaoFactory() : execution (DAOFactory br.unb.cic.iris.core.Manager+.getDaoFactory()); 
+	pointcut injectDaoFactory() : execution (br.unb.cic.iris.persistence.IDAOFactory br.unb.cic.iris.core.Manager+.getDaoFactory()); 
 
 	//In a first moment, I was wondering that using AOP for injecting 
 	//the DAOFactory implementation would be a *napalm bomb* to kill a 
@@ -30,27 +47,23 @@ public privileged aspect PersistenceFeature {
 	//a little difficult to implement using OOP--- at least without a framework 
 	//like spring. Ok, but spring uses AOP internally. 
 	Object around() : injectDaoFactory() {
+		
 		System.out.println(thisJoinPoint.getTarget());
-		String fileName = "persistence.properties";
 		try {
-			Logger.getLogger(PersistenceFeature.class.getName()).info("Load properties" + fileName);
-			Properties properties = new Properties();
-			properties.load(getClass().getResourceAsStream("/" + fileName));
-			String name = properties.getProperty("factory");
-			Logger.getLogger(PersistenceFeature.class.getName()).info("working with factory: " + name);
+			String name = BASE_PACKAGE + "." + persistenceType() + "." + CLASS;
+			Logger.getLogger(InjectDAOFactory.class.getName()).info("working with factory: " + name);
 			if(name != null) {
 				Class factory = Class.forName(name);
 				return factory.getMethod("instance").invoke(null);
 				//return ((DAOFactory)factory.newInstance());
 			}
 			else {
-				Logger.getLogger(PersistenceFeature.class.getName()).severe("Could not instantiate DAOFactory. Factory name is null");			
+				Logger.getLogger(InjectDAOFactory.class.getName()).severe("Could not instantiate DAOFactory. Factory name is null");			
 				throw new RuntimeException();
 			}
 		}
 		catch(Exception e) {
-			Logger.getLogger(PersistenceFeature.class.getName()).severe("Could not instantiate DAOFactory");
-			e.printStackTrace();
+			Logger.getLogger(InjectDAOFactory.class.getName()).severe("Could not instantiate DAOFactory");
 			throw new RuntimeException();
 		}
 	}

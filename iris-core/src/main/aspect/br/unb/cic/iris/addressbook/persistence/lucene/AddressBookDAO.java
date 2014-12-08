@@ -1,4 +1,4 @@
-package br.unb.cic.iris.persistence.lucene;
+package 
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,9 +20,11 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 
+import br.unb.cic.iris.addressbook.model.AddressBookEntry;
+import br.unb.cic.iris.addressbook.persistence.IAddressBookDAO;
 import br.unb.cic.iris.core.exception.DBException;
-import br.unb.cic.iris.core.model.AddressBookEntry;
-import br.unb.cic.iris.persistence.IAddressBookDAO;
+import br.unb.cic.iris.persistence.lucene.IndexManager;
+import br.unb.cic.iris.persistence.lucene.LuceneDoc;
 
 public class AddressBookDAO extends LuceneDoc<AddressBookEntry> implements IAddressBookDAO {
 

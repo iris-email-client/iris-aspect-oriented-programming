@@ -1,7 +1,7 @@
 public aspect Trace {
-    pointcut publicMethodExecuted(): execution(public !static * *(..));
+//    pointcut publicMethodExecuted(): execution(public !static * *(..));
 
-    after(): publicMethodExecuted() {
+//    after(): publicMethodExecuted() {
 //        System.out.printf("Enters on method: %s. \n", thisJoinPoint.getSignature());
 //
 //        Object[] arguments = thisJoinPoint.getArgs();
@@ -12,5 +12,5 @@ public aspect Trace {
 //            }
 //        }
 //        System.out.printf("Exits method: %s. \n", thisJoinPoint.getSignature());
-    }
+//    }
 }

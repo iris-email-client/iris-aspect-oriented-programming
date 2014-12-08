@@ -1,12 +1,12 @@
-package br.unb.cic.iris.core.addressbook;
+package br.unb.cic.iris.addressbook.core;
 
 import java.util.List;
 
+import br.unb.cic.iris.addressbook.model.AddressBookEntry;
+import br.unb.cic.iris.addressbook.persistence.IAddressBookDAO;
 import br.unb.cic.iris.core.SystemFacade;
 import br.unb.cic.iris.core.exception.EmailException;
-import br.unb.cic.iris.core.model.AddressBookEntry;
 import br.unb.cic.iris.core.model.EmailMessage;
-import br.unb.cic.iris.persistence.IAddressBookDAO;
 import br.unb.cic.iris.util.EmailValidator;
 
 /**

@@ -18,7 +18,7 @@
       <expression>Not(addressBook)</expression>
        <transformation>
             <name>removeComponents</name>
-	    <args>addressBookAspect, addressBookFacade, addressBookModel, addressBookCommand, addressBookTest, addressBookDAOTest,addressBookDAOLucene,addressBookDAOSQLite,sqliteCodeAddressBookDAOFactory,luceneCodeAddressBookDAOFactory</args>
+	    <args>addressBookFeature, addressBookCommand, addressBookTest, addressBookDAOTest,addressBookDAOLucene,addressBookDAOSQLite</args>
         </transformation>
     </configuration>
     <configuration>
@@ -32,30 +32,30 @@
     <expression>relational</expression>
        <transformation>
           <name>setPropertyInFile</name>
-          <args>persistenceProperties,factory,br.unb.cic.iris.persistence.sqlite3.SQLiteDAOFactory</args>
+          <args>persistenceProperties,factory,sqlite3</args>
         </transformation>
         <transformation>
           <name>setPropertyInFile</name>
-          <args>persistencePropertiesTest,factory,br.unb.cic.iris.persistence.sqlite3.SQLiteDAOFactory</args>
+          <args>persistencePropertiesTest,factory,sqlite3</args>
         </transformation>
 	<transformation>
             <name>removeComponents</name>
-	    <args>luceneCode,luceneCodeFactory, luceneTest, luceneCodeTagFactory</args>
+	    <args>luceneCode,luceneCodeFactory, luceneTest, luceneCodeTagFactory, addressBookDAOLucene</args>
         </transformation>
     </configuration>
     <configuration>
      <expression>nonRelational</expression>
        <transformation>
           <name>setPropertyInFile</name>
-          <args>persistenceProperties,factory,br.unb.cic.iris.persistence.lucene.LuceneDAOFactory</args>
+          <args>persistenceProperties,factory,lucene</args>
         </transformation>
 	<transformation>
           <name>setPropertyInFile</name>
-          <args>persistencePropertiesTest,factory,br.unb.cic.iris.persistence.lucene.LuceneDAOFactory</args>
+          <args>persistencePropertiesTest,factory,lucene</args>
         </transformation>
        <transformation>
             <name>removeComponents</name>
-	    <args>sqliteCode, sqliteCodeFactory, sqliteTest, tagDAOTest, sqliteCodeTagFactory</args>
+	    <args>sqliteCode, sqliteCodeFactory, sqliteTest, tagDAOTest, sqliteCodeTagFactory, addressBookDAOSQLite</args>
         </transformation>
     </configuration>
 </configurationModel>

@@ -3,11 +3,11 @@ package br.unb.cic.iris.command.console;
 import java.security.InvalidParameterException;
 import java.util.List;
 
+import br.unb.cic.iris.addressbook.model.AddressBookEntry;
 import br.unb.cic.iris.command.AbstractMailCommand;
 import br.unb.cic.iris.core.SystemFacade;
 import br.unb.cic.iris.core.exception.EmailException;
 import br.unb.cic.iris.core.exception.EmailUncheckedException;
-import br.unb.cic.iris.core.model.AddressBookEntry;
 import br.unb.cic.iris.util.EmailValidator;
 
 public class ConsoleAddressBookCommand extends AbstractMailCommand {

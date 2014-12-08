@@ -12,7 +12,7 @@ public privileged aspect FeatureTagDAO {
 		return TagDAO.instance();
 	}
 	
-	declare parents: br.unb.cic.iris.persistence.DAOFactory implements ITagDAOFactory; 
+	declare parents: br.unb.cic.iris.persistence.IDAOFactory implements ITagDAOFactory; 
 	
 	
 }

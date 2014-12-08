@@ -11,7 +11,6 @@ package br.unb.cic.iris.core;
 import org.junit.Assert;
 import org.junit.Test;
 
-import br.unb.cic.iris.core.model.AddressBookEntry;
 import br.unb.cic.iris.mail.EmailProvider;
 
 /**

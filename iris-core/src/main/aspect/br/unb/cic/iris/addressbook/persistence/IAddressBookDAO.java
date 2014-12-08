@@ -1,9 +1,9 @@
-package br.unb.cic.iris.persistence;
+package br.unb.cic.iris.addressbook.persistence;
 
 import java.util.List;
 
+import br.unb.cic.iris.addressbook.model.AddressBookEntry;
 import br.unb.cic.iris.core.exception.DBException;
-import br.unb.cic.iris.core.model.AddressBookEntry;
 
 /**
  * A DAO for address books. 

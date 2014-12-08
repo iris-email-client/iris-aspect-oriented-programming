@@ -1,11 +1,9 @@
 addressBookCommand => iris-console/src/main/java/br/unb/cic/iris/command/console/ConsoleAddressBookCommand.java;
-addressBookFacade => iris-core/src/main/aspect/br/unb/cic/iris/core/addressbook/AddressBookFacade.java;
-addressBookAspect => iris-core/src/main/aspect/br/unb/cic/iris/core/addressbook/FeatureAddressBook.aj; 
-addressBookModel => iris-core/src/main/br/unb/cic/iris/core/model/AddressBookEntry.java;
+addressBookFeature => iris-core/src/main/aspect/br/unb/cic/iris/addressbook;
 addressBookTest => iris-core/src/test/java/br/unb/cic/iris/core/TestAddressBook.java;
 addressBookDAOTest => iris-core/src/test/java/br/unb/cic/iris/core/TestAddressBookDAO.java;
-addressBookDAOLucene => iris-core/src/main/java/br/unb/cic/iris/persistence/lucene/TagDAO.java;
-addressBookDAOSQLite => iris-core/src/main/java/br/unb/cic/iris/persistence/sqlite/TagDAO.java;
+addressBookDAOLucene => iris-core/src/main/aspect/br/unb/cic/iris/addressbook/persistence/lucene;
+addressBookDAOSQLite => iris-core/src/main/aspect/br/unb/cic/iris/addressbook/persistence/sqlite3;
 tagCommand => iris-console/src/main/java/br/unb/cic/iris/command/console/ConsoleTagCommand.java;
 tagManager => iris-core/src/main/java/br/unb/cic/iris/core/TagManager.java;
 tagModel => iris-core/src/main/java/br/unb/cic/iris/core/model/Tag.java;

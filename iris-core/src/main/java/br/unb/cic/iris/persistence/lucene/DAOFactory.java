@@ -3,19 +3,17 @@ package br.unb.cic.iris.persistence.lucene;
 import java.io.File;
 
 import br.unb.cic.iris.core.model.IrisFolder;
-import br.unb.cic.iris.persistence.DAOFactory;
-import br.unb.cic.iris.persistence.IAddressBookDAO;
 import br.unb.cic.iris.persistence.IEmailDAO;
 import br.unb.cic.iris.persistence.IFolderDAO;
 
-public class LuceneDAOFactory implements DAOFactory {
+public class DAOFactory  implements br.unb.cic.iris.persistence.IDAOFactory {
 
 	// Don't forget to mkdir "~/.iris/lucene_idx".
 	public static final String INDEX_DIR = System.getProperty("user.home") + "/.iris/lucene_idx/";
 
-	private static LuceneDAOFactory instance;
+	private static DAOFactory instance;
 	
-	private LuceneDAOFactory () {
+	private DAOFactory () {
 		File path = new File(INDEX_DIR);
 		if (!path.exists()) {
 			boolean status = path.mkdir();
@@ -40,16 +38,13 @@ public class LuceneDAOFactory implements DAOFactory {
 		}
 	}
 	
-	public static LuceneDAOFactory instance() {
+	public static DAOFactory instance() {
 		if (instance == null)
-			instance = new LuceneDAOFactory();
+			instance = new DAOFactory();
 		
 		return instance;
 	}
 
-	public IAddressBookDAO createAddressBookDAO() {
-		return AddressBookDAO.instance();
-	}
 
 	public IEmailDAO createEmailDAO() {
 		return EmailDAO.instance();
@@ -59,8 +54,5 @@ public class LuceneDAOFactory implements DAOFactory {
 		return FolderDAO.instance();
 	}
 	
-//	public ITagDAO createTagDAO() {
-//		return TagDAO.instance();
-//	}
 
 }

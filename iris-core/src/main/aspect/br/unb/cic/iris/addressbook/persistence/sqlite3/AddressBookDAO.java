@@ -1,10 +1,11 @@
-package br.unb.cic.iris.persistence.sqlite3;
+package br.unb.cic.iris.addressbook.persistence.sqlite3;
 
 import java.util.List;
 
+import br.unb.cic.iris.addressbook.model.AddressBookEntry;
+import br.unb.cic.iris.addressbook.persistence.IAddressBookDAO;
 import br.unb.cic.iris.core.exception.DBException;
-import br.unb.cic.iris.core.model.AddressBookEntry;
-import br.unb.cic.iris.persistence.IAddressBookDAO;
+import br.unb.cic.iris.persistence.sqlite3.AbstractDAO;
 
 public final class AddressBookDAO extends AbstractDAO<AddressBookEntry> implements IAddressBookDAO {
 		
