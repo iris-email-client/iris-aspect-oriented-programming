@@ -6,6 +6,8 @@ import java.util.List;
 
 import br.unb.cic.iris.core.model.IrisFolder;
 import br.unb.cic.iris.core.model.EmailMessage;
+import br.unb.cic.iris.persistence.IEmailDAO;
+import br.unb.cic.iris.persistence.IFolderDAO;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -14,18 +16,45 @@ import org.junit.Test;
 
 public class TestFolderManager {
 	
+	private IEmailDAO emailDao;
+	private IFolderDAO folderDao;
+	
+	private EmailMessage message;
+	private EmailMessage message2;
+	private IrisFolder folder;
+	private IrisFolder folder2;
+	
 	private final static String FOLDER_NAME1 = UUID.randomUUID().toString();
 	private final static String FOLDER_NAME2 = UUID.randomUUID().toString();
 	private final static String SUBJECT = UUID.randomUUID().toString();
 	
 	@Before
 	public void setup() throws Exception{
-		//cria folder 1
-		//cria folder 2
-		// adiciona msg no folder 1
-		// adiciona msg no folder 2
 		
 		try {
+
+			emailDao = SystemFacade.instance().getDaoFactory().createEmailDAO();
+			folderDao = SystemFacade.instance().getDaoFactory().createFolderDAO();
+			
+			folder = folderDao.findByName(FOLDER_NAME1);
+			if (folder == null) {
+				folder = new IrisFolder(FOLDER_NAME1);
+				folderDao.saveOrUpdate(folder);
+			}
+			
+			message = new EmailMessage("email-to-test@test.com", "email-to-test@test.com", "email-to-test@test.com", "email-to-test@test.com", SUBJECT, "test message 1");
+			message.setFolder(folder);
+			emailDao.saveMessage(message);
+			
+			folder2 = folderDao.findByName(FOLDER_NAME2);
+			if (folder2 == null) {
+				folder2 = new IrisFolder(FOLDER_NAME2);
+				folderDao.saveOrUpdate(folder2);
+			}
+			
+			message2 = new EmailMessage("email-to-test2@test.com", "email-to-test2@test.com", "email-to-test2@test.com", "email-to-test2@test.com", SUBJECT, "test message 2");
+			message2.setFolder(folder2);
+			emailDao.saveMessage(message2);
 			
 		} catch (Exception e) {
 			throw new Exception("Faild while setting up Folder Test.", e);
@@ -35,12 +64,13 @@ public class TestFolderManager {
 	
 	@After
 	public void tearDown() throws Exception{
-		// deleta msg1
-		// deleta msg2
-		// deleta folder 1
-		// deleta folder 2
 		
 		try {
+			
+			emailDao.delete(message);
+			emailDao.delete(message2);
+			folderDao.delete(folder);
+			folderDao.delete(folder2);
 			
 		} catch (Exception e) {
 			throw new Exception("Faild while tearing down Folder Test.", e);

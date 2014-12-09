@@ -3,29 +3,84 @@ package br.unb.cic.iris.core;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
+
 import br.unb.cic.iris.core.model.AddressBookEntry;
 
 public class TestAddressBook {
+	
+	private final static String NICK1 = "rbonifacio";
+	private final static String EMAIL1 = "rbonifacio@cic.unb.br";
+	private final static String NICK2 = "psalum";
+	private final static String EMAIL2 = "psalum@me.com";
+	
 	@Test
 	public void testSaveAddressBookEntry() {
 		try {
 			SystemFacade facade = SystemFacade.instance();
 		
-			AddressBookEntry entry = facade.find("rbonifacio");
+			AddressBookEntry entry = facade.find(NICK1);
 			if(entry != null) {
-				facade.deleteAddressBookEntry("rbonifacio");
+				facade.deleteAddressBookEntry(NICK1);
+			}
+			entry = facade.find(NICK2);
+			if(entry != null) {
+				facade.deleteAddressBookEntry(NICK2);
 			}
 			
 			System.out.println(" saving address book");
-			facade.addAddressBookEntry("rbonifacio", "rbonifacio@cic.unb.br");
+			facade.addAddressBookEntry(NICK1, EMAIL1);
+			facade.addAddressBookEntry(NICK2, EMAIL2);
 		
-			entry = facade.find("rbonifacio");
+			entry = facade.find(NICK1);
 			Assert.assertNotNull(entry);
-			Assert.assertEquals("rbonifacio@cic.unb.br", entry.getAddress());
+			Assert.assertEquals(EMAIL1, entry.getAddress());
+			entry = facade.find(NICK2);
+			Assert.assertNotNull(entry);
+			Assert.assertEquals(EMAIL2, entry.getAddress());
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		}
+	}
+	
+	@Test
+	public void testListAll() throws Exception{
+		
+		try {
+			
+			List<AddressBookEntry> entries = SystemFacade.instance().listAddressBook();
+			
+			Boolean correctEntry = true;			
+			for(AddressBookEntry entry : entries){
+				if(!entry.getNick().equals(NICK1) && !entry.getNick().equals(NICK2))
+					correctEntry = false;
+			}
+			
+			Assert.assertTrue("One or more entries werent retrieved",!correctEntry);
+			
+		}catch (Exception e) {
+			throw new Exception("Faild while listing all Address Book entries.", e);
+		}
+		
+	}
+	@Test
+	public void testDelete()throws Exception{
+		
+		try {
+			
+			SystemFacade.instance().deleteAddressBookEntry(NICK1);
+			SystemFacade.instance().deleteAddressBookEntry(NICK2);
+			
+			Assert.assertNotNull("First entry was found after deleting it.",SystemFacade.instance().find(NICK1));
+			Assert.assertNotNull("Seccond entry was found after deleting it.",SystemFacade.instance().find(NICK2));
+			
+		} catch (Exception e) {
+			throw new Exception("Faild while deleting entries from Address Book.", e);
+		}
+		
 	}
 }
