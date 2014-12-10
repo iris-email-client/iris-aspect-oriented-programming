@@ -19,6 +19,7 @@ import java.util.List;
 
 import br.unb.cic.iris.core.model.EmailMessage;
 import br.unb.cic.iris.core.model.AddressBookEntry;
+import br.unb.cic.iris.core.model.IrisFolder;
 import br.unb.cic.iris.mail.EmailProvider;
 
 
@@ -30,12 +31,33 @@ public class TestSystemFacade {
 
 	private EmailProvider provider;
 	private final static String SUBJECT = UUID.randomUUID().toString();
-	private EmailMessage message = EmailMessage("teste@teste.com","teste@teste.com","teste@teste.com",SUBJECT,"Conteúdo de teste");
+	private final static String TESTEMAIL = "teste@teste.com";
+	private EmailMessage message = new EmailMessage(TESTEMAIL,TESTEMAIL,"","",SUBJECT,"Conteúdo de teste");
 	
 	@Before
-	public void setup(){
+	public void testSend() throws Exception {
 		
+		try {
+			
+			SystemFacade.instance().send(message);
+			SystemFacade.instance().send(message);
+			
+		} catch (Exception e) {
+			throw new Exception("failed while sending message.", e);
+		}
 		
+	}
+	
+	@After
+	public void tearDown() throws Exception {
+		
+		try {
+			
+			//TODO: delete message created during the test.
+			
+		} catch (Exception e) {
+			throw new Exception("failed while sending message.", e);
+		}
 		
 	}
 	
@@ -48,7 +70,7 @@ public class TestSystemFacade {
 			
 			
 		} catch (Exception e) {
-			throw new Exception("Faild while getting to defout provider.", e);
+			throw new Exception("failed while getting to defout provider.", e);
 		}
 		
 	}
@@ -61,47 +83,39 @@ public class TestSystemFacade {
 			
 			
 		} catch (Exception e) {
-			throw new Exception("Faild while connecting to defout provider.", e);
+			throw new Exception("failed while connecting to defout provider.", e);
 		}
 		
 	}
 	
+	
 	@Test
-	public void testSend() throws Exception {
+	public void testDownloadMessagesAndGetMessages() throws Exception{
 		
 		try {
 			
-			SystemFacade.instance().send(message);
+			String folder = IrisFolder.INBOX;
+			SystemFacade.instance().downloadMessages(folder);
+			
+			List<EmailMessage> messages = SystemFacade.instance().getMessages(folder);
+			
+			Boolean correctMessage = true;
+			for(EmailMessage message : messages){
+				
+				if(!message.getSubject().equals(SUBJECT))
+					correctMessage = false;
+				
+			}
+			
+			Assert.assertTrue("Wrong messages retrieved", !correctMessage);
+			
 			
 		} catch (Exception e) {
-			throw new Exception("Faild while sending message.", e);
+			throw new Exception("failed while downloading message.", e);
 		}
 		
 	}
 	
-	@Test
-	public void testDownloadMessages() throws Exception{
-		
-		try {
-			
-		} catch (Exception e) {
-			throw new Exception("Faild while downloading message.", e);
-		}
-		
-	}
-	
-	@Test
-	public void testGetMessages() throws Exception{
-		
-		try {
-			
-			
-			
-		} catch (Exception e) {
-			throw new Exception("Faild while sending message.", e);
-		}
-		
-	}
 	
 	@Test
 	public void testListInboxMessages() throws Exception{
@@ -124,7 +138,7 @@ public class TestSystemFacade {
 			Assert.assertTrue("One or more messages retrieved are duplicated", counter>2 && correctMessage);
 			
 		} catch (Exception e) {
-			throw new Exception("Faild while listing inbox messages.", e);
+			throw new Exception("failed while listing inbox messages.", e);
 		}
 		
 	}
