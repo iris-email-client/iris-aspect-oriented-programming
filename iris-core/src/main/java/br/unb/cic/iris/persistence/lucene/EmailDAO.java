@@ -14,13 +14,16 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.AtomicReaderContext;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Collector;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.Scorer;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
 import org.apache.lucene.search.SortField.Type;
@@ -33,9 +36,51 @@ import br.unb.cic.iris.core.model.EmailMessage;
 import br.unb.cic.iris.persistence.IEmailDAO;
 
 public class EmailDAO extends LuceneDoc<EmailMessage> implements IEmailDAO {
-	
+
 	private static EmailDAO instance;
-	
+
+	public class EmailCollector extends AbstractCollector {
+
+		private IndexSearcher searcher;
+
+		private List<EmailMessage> result;
+
+		public EmailCollector(IndexSearcher searcher, List<EmailMessage> result) {
+			this.searcher = searcher;
+			this.result = result;
+		}
+
+		public void tryCollect(int doc) throws Exception {
+			Document d = searcher.doc(doc);
+			result.add(fromLuceneDoc(d));
+		}
+	}
+
+	public abstract class AbstractCollector extends Collector {
+
+		private int base;
+
+		public void setScorer(Scorer scorer) {
+		}
+
+		public boolean acceptsDocsOutOfOrder() {
+			return true;
+		}
+
+		public void collect(int doc) {
+			try {
+				tryCollect(doc + base);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		abstract void tryCollect(int doc) throws Exception;
+
+		public void setNextReader(AtomicReaderContext context) throws IOException {
+			 this.base = context.docBase;
+		}
+	}
 	private EmailDAO() { } 
 	
 	public static EmailDAO instance() {
@@ -178,8 +223,23 @@ public class EmailDAO extends LuceneDoc<EmailMessage> implements IEmailDAO {
 	}
 	
 	@Override
-	public List<EmailMessage> findByFolder(String folderId) {
-		throw new RuntimeException("not implemented yet");
+	public List<EmailMessage> findByFolder(String folderId) throws DBException {
+		List<EmailMessage> result = new ArrayList<EmailMessage>();
+		try {
+			Query typeQuery = new TermQuery(new Term("type", "email"));
+			Query idQuery = new TermQuery(new Term("folderId", folderId));
+
+			BooleanQuery q = new BooleanQuery();
+			q.add(new BooleanClause(typeQuery, Occur.MUST));
+			q.add(new BooleanClause(idQuery, Occur.MUST));
+
+			IndexSearcher searcher = IndexManager.getSearcher();
+			searcher.search(q, new EmailCollector(searcher, result));
+
+		} catch (Exception e) {
+			throw new DBException("Erro ocurred while retrieving messages from folder.", e);
+		}
+		return result;
 	}
 
 	@Override

@@ -28,6 +28,13 @@
 	    <args>tagCommand, tagManager, tagModel, tagDAO, tagDAOSQLite, tagDAOLucene, tagDAOLuceneTest, tagDAOTest, sqliteCodeTagDAOFactory, luceneCodeTagDAOFactory</args>
         </transformation>
     </configuration>
+    <configuration>
+      <expression>Not(search)</expression>
+       <transformation>
+            <name>removeComponents</name>
+      <args>searchCommand</args>
+        </transformation>
+    </configuration>
     <configuration>     
     <expression>relational</expression>
        <transformation>
