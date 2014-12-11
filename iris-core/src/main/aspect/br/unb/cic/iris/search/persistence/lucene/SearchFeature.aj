@@ -1,4 +1,4 @@
-package br.unb.cic.iris.search;
+package br.unb.cic.iris.search.persistence.lucene;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +18,7 @@ import br.unb.cic.iris.core.exception.EmailException;
 import br.unb.cic.iris.core.model.EmailMessage;
 import br.unb.cic.iris.persistence.lucene.EmailDAO;
 import br.unb.cic.iris.persistence.lucene.IndexManager;
+import br.unb.cic.iris.search.Searcher;
 
 public aspect SearchFeature {
 	declare parents: br.unb.cic.iris.core.SystemFacade implements Searcher;

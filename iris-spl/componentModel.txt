@@ -20,5 +20,6 @@ luceneTest => iris-core/src/test/java/br/unb/cic/iris/persistence/lucene;
 sqliteCode => iris-core/src/main/java/br/unb/cic/iris/persistence/sqlite3;
 sqliteTest => iris-core/src/test/java/br/unb/cic/iris/persistence/sqlite3;
 searchCommand => iris-console/src/main/java/br/unb/cic/iris/command/console/ConsoleSearchCommand.java;
-searchCommandFeature => iris-core/src/main/aspect/br/unb/cic/iris/search
-
+searchFeature => iris-core/src/main/aspect/br/unb/cic/iris/search;
+searchFeatureRelational => iris-core/src/main/aspect/br/unb/cic/iris/search/persistence/sqlite3;
+searchFeatureLucene => iris-core/src/main/aspect/br/unb/cic/iris/search/persistence/lucene;

@@ -32,7 +32,21 @@
       <expression>Not(search)</expression>
        <transformation>
             <name>removeComponents</name>
-      <args>searchCommand, searchCommandFeature</args>
+	    <args>searchCommand, searchFeature</args>
+        </transformation>
+    </configuration>
+    <configuration>
+      <expression>And(relational, search)</expression>
+       <transformation>
+            <name>removeComponents</name>
+	    <args>searchFeatureLucene</args>
+        </transformation>
+    </configuration>
+    <configuration>
+      <expression>And(nonRelational, search)</expression>
+       <transformation>
+            <name>removeComponents</name>
+	    <args>searchFeatureRelational</args>
         </transformation>
     </configuration>
     <configuration>     
