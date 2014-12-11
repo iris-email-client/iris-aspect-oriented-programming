@@ -25,14 +25,14 @@
       <expression>Not(tagging)</expression>
        <transformation>
             <name>removeComponents</name>
-	    <args>tagCommand, tagManager, tagModel, tagDAO, tagDAOSQLite, tagDAOLucene, tagDAOLuceneTest, tagDAOTest, sqliteCodeTagDAOFactory, luceneCodeTagDAOFactory</args>
+	    <args>tagCommand, tagFeature, tagDAOLuceneTest, tagDAOTest</args>
         </transformation>
     </configuration>
     <configuration>
       <expression>Not(search)</expression>
        <transformation>
             <name>removeComponents</name>
-      <args>searchCommand</args>
+      <args>searchCommand, searchCommandFeature</args>
         </transformation>
     </configuration>
     <configuration>     
@@ -62,7 +62,7 @@
         </transformation>
        <transformation>
             <name>removeComponents</name>
-	    <args>sqliteCode, sqliteCodeFactory, sqliteTest, tagDAOTest, tagDAOSQLite, addressBookDAOSQLite</args>
+	    <args>sqliteCode, sqliteCodeFactory, hibernateCode, sqliteTest, tagDAOTest, tagDAOSQLite, addressBookDAOSQLite</args>
         </transformation>
     </configuration>
 </configurationModel>

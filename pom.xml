@@ -213,7 +213,6 @@
 		</pluginManagement>
 	</build>
 	<modules>
-		<module>iris-aspect</module>
 		<module>iris-core</module>
 		<module>iris-console</module>
 		<!-- <module>iris-gui</module> -->

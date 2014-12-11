@@ -12,6 +12,8 @@
 					<feature name="nonRelational"/>
 				</alt>
 				<feature name="tagging"/>
+				<feature name="search"/>
+
 			</and>
 		</struct>
   <calculations Auto="true" Constraints="true" Features="true" Redundant="true"/>
