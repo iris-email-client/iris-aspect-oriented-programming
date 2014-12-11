@@ -6,7 +6,10 @@ are implemented in this version:
 * Send and Receive e-mail messages;
 * Multiple folders (though we are not able to create new folders);
 * Address book;
-* Relational database.
+* Relational database;
+* Lucene database (alternative to relational);
+* Tagging;
+* Simple search for e-mails.
 
 ## Import into Eclipse IDE
 
