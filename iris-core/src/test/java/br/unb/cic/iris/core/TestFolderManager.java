@@ -84,13 +84,13 @@ public class TestFolderManager {
 		try {
 			
 			String oldFolderName = FolderManager.instance().getCurrentFolderName();
-			IrisFolder folder = FolderManager.instance().changeToFolder(FOLDER_NAME1);
+			IrisFolder folder = FolderManager.instance().changeToFolder(this.folder2.getId());
 			String newFolderName = FolderManager.instance().getCurrentFolderName();
 			Boolean sameFolder = (oldFolderName.equals(newFolderName));
 			
-			Assert.assertTrue("Folder is not consistent between two calls", !folder.getName().equals(newFolderName));
-			Assert.assertTrue("Changing from folder A to B faild", sameFolder);
-			Assert.assertTrue("Changed to an unexpected folder", !newFolderName.equals(FOLDER_NAME1));
+			Assert.assertTrue("Folder is not consistent between two calls", folder.getName().equals(newFolderName));
+			Assert.assertTrue("Changing from folder A to B faild", !sameFolder);
+			Assert.assertTrue("Changed to an unexpected folder", newFolderName.equals(FOLDER_NAME2));
 			
 			
 		} catch (Exception e) {
@@ -109,15 +109,15 @@ public class TestFolderManager {
 			Boolean correctFolder = true;
 			Integer counter = 0;
 			for(IrisFolder folder : folders){
-				if(!folder.getName().equals(FOLDER_NAME1) || !folder.getName().equals(FOLDER_NAME2))
+				if(!folder.getName().equals(FOLDER_NAME1) && !folder.getName().equals(FOLDER_NAME2))
 					correctFolder = false;
 				counter++;
 					
 			}
 			
-			Assert.assertTrue("Folders that are not suposed to exist were found", !correctFolder);
-			Assert.assertTrue("One or more folders werent retrived as it should", counter<2);
-			Assert.assertTrue("Duplicated folder retrieved", counter>2 && correctFolder);
+			Assert.assertTrue("Folders that are not suposed to exist were found", correctFolder);
+			Assert.assertTrue("One or more folders werent retrived as it should", counter==2);
+			Assert.assertTrue("Duplicated folder retrieved", counter<=2 && correctFolder);
 	
 		}
 		catch(Exception e){
@@ -128,6 +128,8 @@ public class TestFolderManager {
 	@Test
 	public void testListFolderMessages() throws Exception {
 		try{
+			
+			FolderManager.instance().changeToFolder(this.folder.getId());
 			List<EmailMessage> messages = FolderManager.instance().listFolderMessages();
 			
 			Boolean correctMessage = true;
@@ -138,9 +140,9 @@ public class TestFolderManager {
 				counter++;
 			}
 			
-			Assert.assertTrue("Folder cointais messages that shouldnt be there.", !correctMessage);
-			Assert.assertTrue("One or more messages werent retrived as it should.", counter<2);
-			Assert.assertTrue("Duplicated message retrieved", counter>2 && correctMessage);
+			Assert.assertTrue("Folder cointais messages that shouldnt be there.", correctMessage);
+			Assert.assertTrue("One or more messages werent retrived as it should.", counter==1);
+			Assert.assertTrue("Duplicated message retrieved", counter==1 && correctMessage);
 		}
 		catch(Exception e){
 			throw new Exception("Faild while listing all messages from one folder", e);
