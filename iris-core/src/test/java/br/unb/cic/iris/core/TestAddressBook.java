@@ -1,6 +1,8 @@
 package br.unb.cic.iris.core;
 
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.UUID;
@@ -16,7 +18,7 @@ public class TestAddressBook {
 	private final static String NICK2 = "psalum";
 	private final static String EMAIL2 = "psalum@me.com";
 	
-	@Test
+	@Before
 	public void testSaveAddressBookEntry() {
 		try {
 			SystemFacade facade = SystemFacade.instance();
@@ -67,7 +69,7 @@ public class TestAddressBook {
 		}
 		
 	}
-	@Test
+	@After
 	public void testDelete()throws Exception{
 		
 		try {
