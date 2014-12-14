@@ -60,7 +60,7 @@ public class TestAddressBook {
 					correctEntry = false;
 			}
 			
-			Assert.assertTrue("One or more entries werent retrieved",!correctEntry);
+			Assert.assertTrue("One or more entries werent retrieved",correctEntry);
 			
 		}catch (Exception e) {
 			throw new Exception("Faild while listing all Address Book entries.", e);
@@ -75,8 +75,8 @@ public class TestAddressBook {
 			SystemFacade.instance().deleteAddressBookEntry(NICK1);
 			SystemFacade.instance().deleteAddressBookEntry(NICK2);
 			
-			Assert.assertNotNull("First entry was found after deleting it.",SystemFacade.instance().find(NICK1));
-			Assert.assertNotNull("Seccond entry was found after deleting it.",SystemFacade.instance().find(NICK2));
+			Assert.assertNull("First entry was found after deleting it.",SystemFacade.instance().find(NICK1));
+			Assert.assertNull("Seccond entry was found after deleting it.",SystemFacade.instance().find(NICK2));
 			
 		} catch (Exception e) {
 			throw new Exception("Faild while deleting entries from Address Book.", e);
