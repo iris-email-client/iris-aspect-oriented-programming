@@ -1,4 +1,4 @@
-package br.unb.cic.iris.search.persistence.sqlite3;
+package br.unb.cic.iris.search.simple;
 
 import java.util.ArrayList;
 import java.util.List;

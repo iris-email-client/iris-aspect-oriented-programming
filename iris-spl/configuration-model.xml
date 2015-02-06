@@ -39,14 +39,14 @@
       <expression>And(relational, search)</expression>
        <transformation>
             <name>removeComponents</name>
-	    <args>searchFeatureLucene</args>
+	    <args>searchFeatureAdvanced</args>
         </transformation>
     </configuration>
     <configuration>
       <expression>And(nonRelational, search)</expression>
        <transformation>
             <name>removeComponents</name>
-	    <args>searchFeatureRelational</args>
+	    <args>searchFeatureSimple</args>
         </transformation>
     </configuration>
     <configuration>     

@@ -6,9 +6,9 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>iris</name>
-	<description>Iris Email Client - Java 8</description>
+	<description>Iris Email Client - Java 8			</description>
 	<inceptionYear>2014</inceptionYear>
-	<url>https://github.com/iris-email-client/iris-base/tree/iris-base-j7</url>
+	<url>https://github.com/iris-email-client/iris-aspect-oriented-programming</url>
 	<properties>
 		<skipTests>false</skipTests>
 		<compiler.version>1.7</compiler.version>
@@ -35,9 +35,9 @@
 			<roles> <role>Developer</role> </roles> <timezone></timezone> </developer> -->
 	</developers>
 	<scm>
-		<connection>scm:git:https://github.com/iris-email-client/iris-base/tree/iris-base-j7</connection>
-		<developerConnection>scm:git:https://github.com/iris-email-client/iris-base/tree/iris-base-j7</developerConnection>
-		<url>https://github.com/iris-email-client/iris-base/tree/iris-base-j7</url>
+		<connection>scm:git:https://github.com/iris-email-client/iris-aspect-oriented-programming</connection>
+		<developerConnection>scm:git:https://github.com/iris-email-client/iris-aspect-oriented-programming.git</developerConnection>
+		<url>https://github.com/iris-email-client/iris-aspect-oriented-programming</url>
 	</scm>
 	<organization>
 		<name>Universidade de Brasília</name>
