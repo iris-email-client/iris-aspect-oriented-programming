@@ -4,15 +4,18 @@
 			<and mandatory="true" name="iris">
 				<and mandatory="true" name="services">
 					<feature mandatory="true" name="sendMessage"/>
-					<feature mandatory="true" name="receiveMessage"/>
+					<feature mandatory="true" names="receiveMessage"/>
 				</and>
 				<feature name="addressBook"/>
-				<alt mandatory="true" name="persistence">
+				<or mandatory="true" name="persistence">
 					<feature name="relational"/>
 					<feature name="nonRelational"/>
-				</alt>
+				</or>
 				<feature name="tagging"/>
-				<feature name="search"/>
+				<or mandatory="false" name="search">
+					<feature name="simpleSearch"/>
+					<feature name="advancedSearch"/>
+				</or>
 
 			</and>
 		</struct>

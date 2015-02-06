@@ -1,4 +1,4 @@
-package br.unb.cic.iris.search.persistence.lucene;
+package br.unb.cic.iris.search.advanced;
 
 import java.util.ArrayList;
 import java.util.List;
