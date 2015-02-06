@@ -10,7 +10,7 @@ are implemented in this version:
 * Relational database;
 * Lucene database (alternative to relational);
 * Tagging;
-* Simple search for e-mails.
+* Search, simple and advanced.
 
 ## Import into Eclipse IDE
 
