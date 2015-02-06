@@ -1,7 +1,7 @@
 name=irisProductLine
-feature-model=/home/fausto/Dropbox/gits/iris-aspect-oriented-programming/iris-spl/featureModel.fide
-component-model=/home/fausto/Dropbox/gits/iris-aspect-oriented-programming/iris-spl/componentModel.txt
-configuration-model=/home/fausto/Dropbox/gits/iris-aspect-oriented-programming/iris-spl/configuration-model.xml
-instance-model=/home/fausto/Dropbox/gits/iris-aspect-oriented-programming/iris-spl/instance-model07.him
-source-dir=/home/fausto/Dropbox/gits/iris-aspect-oriented-programming
-target-dir=/home/fausto/Dropbox/gits/IrisAOP/07
+feature-model=/home/fausto/Dropbox/gits/iris/iris-aspect-oriented-programming/iris-spl/featureModel.fide
+component-model=/home/fausto/Dropbox/gits/iris/iris-aspect-oriented-programming/iris-spl/componentModel.txt
+configuration-model=/home/fausto/Dropbox/gits/iris/iris-aspect-oriented-programming/iris-spl/configuration-model.xml
+instance-model=/home/fausto/Dropbox/gits/iris/iris-aspect-oriented-programming/iris-spl/instance-model07.him
+source-dir=/home/fausto/Dropbox/gits/iris/iris-aspect-oriented-programming
+target-dir=/home/fausto/Dropbox/gits/iris/IrisAOP/07

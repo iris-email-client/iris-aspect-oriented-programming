@@ -4,7 +4,7 @@
 			<and mandatory="true" name="iris">
 				<and mandatory="true" name="services">
 					<feature mandatory="true" name="sendMessage"/>
-					<feature mandatory="true" names="receiveMessage"/>
+					<feature mandatory="true" name="receiveMessage"/>
 				</and>
 				<feature name="addressBook"/>
 				<or mandatory="true" name="persistence">

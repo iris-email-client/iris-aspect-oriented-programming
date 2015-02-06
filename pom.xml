@@ -3,10 +3,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.unb.cic.iris</groupId>
 	<artifactId>iris-parent</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.3.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>iris</name>
-	<description>Iris Email Client - Java 8			</description>
+	<description>Iris Email Client (AOP version)</description>
 	<inceptionYear>2014</inceptionYear>
 	<url>https://github.com/iris-email-client/iris-aspect-oriented-programming</url>
 	<properties>

@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>br.unb.cic.iris</groupId>
 		<artifactId>iris-parent</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.3.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>iris-console-teste1</artifactId>
 	<dependencies>
