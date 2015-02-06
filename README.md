@@ -1,4 +1,5 @@
-# IRIS E-mail Client
+# IRIS E-mail Client (AOP version)
+[![Build Status](https://travis-ci.org/iris-email-client/iris-aspect-oriented-programming.svg?branch=master)](https://travis-ci.org/iris-email-client/iris-aspect-oriented-programming)
 
 This is the AOP version of IRIS e-mail client. The following features 
 are implemented in this version:
@@ -9,7 +10,7 @@ are implemented in this version:
 * Relational database;
 * Lucene database (alternative to relational);
 * Tagging;
-* Simple search for e-mails.
+* Search, simple and advanced.
 
 ## Import into Eclipse IDE
 
