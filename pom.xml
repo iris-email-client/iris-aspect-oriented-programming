@@ -216,7 +216,6 @@
 		<module>iris-core</module>
 		<module>iris-console</module>
 		<!-- <module>iris-gui</module> -->
-		<module>iris-console-teste1</module>
 	</modules>
 	<reporting>
 		<plugins>
