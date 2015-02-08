@@ -201,7 +201,8 @@ public class EmailDAO extends LuceneDoc<EmailMessage> implements IEmailDAO {
 	}
 
 	@Override
-	protected EmailMessage fromLuceneDoc(Document doc) {
+	    //TODO: this must be private, fix it later.
+	public EmailMessage fromLuceneDoc(Document doc) {
 		EmailMessage email = new EmailMessage();
 		email.setId(doc.getField("id").stringValue());
 		email.setFrom(doc.getField("from").stringValue());
