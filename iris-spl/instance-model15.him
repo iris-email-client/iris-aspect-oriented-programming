@@ -5,3 +5,6 @@ receiveMessage
 persistence
 nonRelational
 addressBook
+tagging
+search
+advancedSearch

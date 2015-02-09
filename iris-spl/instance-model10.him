@@ -4,4 +4,4 @@ sendMessage
 receiveMessage
 persistence
 nonRelational
-addressBook
+tagging

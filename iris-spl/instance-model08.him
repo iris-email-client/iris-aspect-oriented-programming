@@ -4,5 +4,3 @@ sendMessage
 receiveMessage
 persistence
 nonRelational
-search
-advancedSearch

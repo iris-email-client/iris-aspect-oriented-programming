@@ -1,36 +1,107 @@
 List of products in this directory
 
-instance-model00
+instance-model00 (SimpleRelational)
  - iris
  - services(sendMessage, receiveMessage)
  - persistence(relational)
 
-instance-model01
+instance-model01 (SimpleRelationalAddressBook)
  - iris
  - services(sendMessage, receiveMessage)
  - persistence(relational)
  - addressBook
 
-instance-model02
+instance-model02 (SimpleRelationalTag)
  - iris
  - services(sendMessage, receiveMessage)
- - addressBook
  - persistence(relational)
+ - tagging
 
-instance-model03
+instance-model03 (SimpleRelationalAddressBookTag)
  - iris
  - services(sendMessage, receiveMessage)
  - persistence(relational)
  - addressBook
  - tagging
 
-instance-model04
--iris
-- services(sendMessage, receiveMessage)
-- persistence(nonRelational)
+instance-model04 (SimpleRelationalSearch)
+ - iris
+ - services(sendMessage, receiveMessage)
+ - persistence(relational)
+ - search(simpleSearch)
 
-instance-model05
--iris
-- services(sendMessage, receiveMessage)
-- persistence(nonRelational)
-- addressBook
+instance-model05 (SimpleRelationalSearchTag)
+ - iris
+ - services(sendMessage, receiveMessage)
+ - persistence(relational)
+ - tagging
+ - search(simpleSearch)
+
+instance-model06 (SimpleRelationalSearchAddressBook)
+ - iris
+ - services(sendMessage, receiveMessage)
+ - persistence(relational)
+ - addressBook
+ - search(simpleSearch)
+
+instance-model07 (CompleteRelational)
+ - iris
+ - services(sendMessage, receiveMessage)
+ - persistence(relational)
+ - tagging
+ - addressBook
+ - search(simpleSearch)
+
+--------------------------------------------------------------------------
+
+instance-model08 (SimpleLucene)
+ - iris
+ - services(sendMessage, receiveMessage)
+ - persistence(nonRelational)
+
+instance-model09 (SimpleLuceneAddressBook)
+ - iris
+ - services(sendMessage, receiveMessage)
+ - persistence(nonRelational)
+ - addressBook
+
+instance-model10 (SimpleLuceneTag)
+ - iris
+ - services(sendMessage, receiveMessage)
+ - persistence(nonRelational)
+ - tagging
+
+instance-model11 (SimpleLuceneAddressBookTag)
+ - iris
+ - services(sendMessage, receiveMessage)
+ - persistence(nonRelational)
+ - addressBook
+ - tagging
+
+instance-model12 (SimpleLuceneSearch)
+ - iris
+ - services(sendMessage, receiveMessage)
+ - persistence(nonRelational)
+ - search(advancedSearch)
+
+instance-model13 (SimpleLuceneSearchTag)
+ - iris
+ - services(sendMessage, receiveMessage)
+ - persistence(nonRelational)
+ - tagging
+ - search(advancedSearch)
+
+instance-model14 (SimpleLuceneSearchAddressBook)
+ - iris
+ - services(sendMessage, receiveMessage)
+ - persistence(nonRelational)
+ - addressBook
+ - search(advancedSearch)
+
+instance-model15 (CompleteLucene)
+ - iris
+ - services(sendMessage, receiveMessage)
+ - persistence(nonRelational)
+ - tagging
+ - addressBook
+ - search(advancedSearch)

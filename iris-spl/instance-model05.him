@@ -3,5 +3,7 @@ services
 sendMessage
 receiveMessage
 persistence
-nonRelational
-addressBook
+relational
+tagging
+search
+simpleSearch
