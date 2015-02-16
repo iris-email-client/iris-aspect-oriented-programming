@@ -7,19 +7,23 @@
 					<feature mandatory="true" name="receiveMessage"/>
 				</and>
 				<feature name="addressBook"/>
-				<or mandatory="true" name="persistence">
+				<alt mandatory="true" name="persistence">
 					<feature name="relational"/>
 					<feature name="nonRelational"/>
-				</or>
+				</alt>
 				<feature name="tagging"/>
-				<or mandatory="false" name="search">
+				<alt mandatory="true" name="ui">
+					<feature name="console"/>
+					<feature abstract="true" name="gui"/>
+				</alt>
+				<alt mandatory="false" name="search">
 					<feature name="simpleSearch"/>
 					<feature name="advancedSearch"/>
-				</or>
+				</alt>
 
 			</and>
 		</struct>
-  <calculations Auto="true" Constraints="true" Features="true" Redundant="true"/>
+		<calculations Auto="true" Constraints="true" Features="true" Redundant="true"/>
 		<comments/>
 		<featureOrder userDefined="false"/>
 	</featureModel>

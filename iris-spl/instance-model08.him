@@ -2,5 +2,7 @@ iris
 services
 sendMessage
 receiveMessage
+ui
+console
 persistence
 nonRelational
