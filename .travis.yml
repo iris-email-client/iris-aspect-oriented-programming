@@ -10,8 +10,8 @@ before_install:
   - cd iris-spl
   - chmod +x generate_properties.sh
   - chmod +x generate_products.sh
+  - chmod +x build_products.sh
   - ./generate_properties.sh
   - ./generate_products.sh -a
 
-script:
-
+script: ./iris-spl/build_products.sh
