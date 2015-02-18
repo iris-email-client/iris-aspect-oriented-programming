@@ -10,7 +10,7 @@ before_install:
   - chmod +x generate_properties.sh
   - chmod +x generate_products.sh
   - ./generate_properties.sh
-  - ./generate_products.sh
+  - ./generate_products.sh -a
 
 script:
 
