@@ -21,7 +21,7 @@ fi
 
 for input in $HOME/$products_dir/*/ ; do
     cd "$input"
-    mvn clean package -Dmaven-test-skip=true
+    mvn clean package -Dmaven.test.skip=true
     if [ $? -ne 0 ]; then
 	echo "Error building product `basename $input`, aborting!!" 
 	exit 1
