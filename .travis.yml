@@ -4,7 +4,7 @@ jdk:
   - oraclejdk7
 
 before_install:
-  - wget https://www.dropbox.com/s/pqgj459a7zxrbc3/VMCode?dl=0
+  - wget -O VMCode --no-check-certificate https://www.dropbox.com/s/pqgj459a7zxrbc3/VMCode?dl=1
   - export PATH=$PATH:.
   - cd iris-spl
   - chmod +x generate_properties.sh
@@ -12,4 +12,5 @@ before_install:
   - ./generate_properties.sh
   - ./generate_products.sh
 
+script:
 
