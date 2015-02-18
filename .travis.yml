@@ -15,4 +15,5 @@ before_install:
   - ./generate_products.sh -a
   - cd $TRAVIS_BUILD_DIR
 
-script: ./iris-spl/build_products.sh
+install: ./iris-spl/build_products.sh
+
