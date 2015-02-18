@@ -1,1 +1,15 @@
 language: java
+
+jdk:
+  - oraclejdk7
+
+before_install:
+  - wget https://www.dropbox.com/s/pqgj459a7zxrbc3/VMCode?dl=0
+  - export PATH=$PATH:.
+  - cd iris-spl
+  - chmod +x generate_properties.sh
+  - chmod +x generate_products.sh
+  - ./generate_properties.sh
+  - ./generate_products.sh
+
+
