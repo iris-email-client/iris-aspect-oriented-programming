@@ -13,5 +13,6 @@ before_install:
   - chmod +x build_products.sh
   - ./generate_properties.sh
   - ./generate_products.sh -a
+  - cd $TRAVIS_BUILD_DIR
 
 script: ./iris-spl/build_products.sh
