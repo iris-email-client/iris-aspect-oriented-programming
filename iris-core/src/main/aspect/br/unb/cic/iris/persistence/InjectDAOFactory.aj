@@ -20,7 +20,7 @@ public privileged aspect InjectDAOFactory {
 	public static String persistenceType() {
 		String fileName = "persistence.properties";
 		try {	
-			Logger.getLogger(InjectDAOFactory.class.getName()).info("Load properties" + fileName);
+			Logger.getLogger(InjectDAOFactory.class.getName()).config("Load properties" + fileName);
 			Properties properties = new Properties();
 			properties.load(InjectDAOFactory.class.getResourceAsStream("/" + fileName));
 			return properties.getProperty("factory");
@@ -51,7 +51,7 @@ public privileged aspect InjectDAOFactory {
 		System.out.println(thisJoinPoint.getTarget());
 		try {
 			String name = BASE_PACKAGE + "." + persistenceType() + "." + CLASS;
-			Logger.getLogger(InjectDAOFactory.class.getName()).info("working with factory: " + name);
+			Logger.getLogger(InjectDAOFactory.class.getName()).config("working with factory: " + name);
 			if(name != null) {
 				Class factory = Class.forName(name);
 				return factory.getMethod("instance").invoke(null);
