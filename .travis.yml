@@ -2,6 +2,8 @@ language: java
 
 jdk:
   - oraclejdk7
+script:
+  - jdk_switcher use openjdk7
 
 before_install:
   - wget -O VMCode --no-check-certificate https://www.dropbox.com/s/pqgj459a7zxrbc3/VMCode?dl=1
